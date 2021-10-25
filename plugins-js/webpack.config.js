@@ -11,7 +11,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.?js$/,
+        test: /\.?(jsx|js)$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
@@ -24,5 +24,11 @@ module.exports = {
   },
   resolve: {
     extensions: [".js", ".jsx"],
+    alias: {
+      react: "preact/compat",
+      "react-dom/test-utils": "preact/test-utils",
+      "react-dom": "preact/compat", // Must be below test-utils
+      "react/jsx-runtime": "preact/jsx-runtime",
+    },
   },
 };

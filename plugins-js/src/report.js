@@ -10,7 +10,7 @@ if (
   REPORT_URL = "";
 }
 
-function sendAnswer(slug, points, summary, long_answer) {
+function sendAnswer(slug, points, test_results, student_input) {
   if (REPORT_URL === "" || getToken() === "") {
     return false;
   }
@@ -20,8 +20,8 @@ function sendAnswer(slug, points, summary, long_answer) {
     slug: slug,
     submission_date: Date.now(),
     points: points,
-    summary: summary,
-    long_answer: long_answer,
+    test_results: test_results,
+    student_input: student_input,
   };
 
   return fetch(answer_url, {
@@ -34,6 +34,7 @@ function sendAnswer(slug, points, summary, long_answer) {
     body: JSON.stringify(answer_data),
   }).then((resp) => {
     console.log(resp);
+    return resp;
   });
 }
 
