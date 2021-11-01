@@ -19,7 +19,7 @@ const ButtonContainer = styled.div`
 `;
 
 function Quiz({ choices, answer, twoCols, studentAnswerIdx, submit }) {
-  const [submitted, setSubmitted] = useState(!Number.isNaN(studentAnswerIdx));
+  const [answered, setAnswered] = useState(!Number.isNaN(studentAnswerIdx));
   const [selectedChoice, setSelectedChoice] = useState(studentAnswerIdx);
   const hasSelectedChoice =
     !Number.isNaN(selectedChoice) && selectedChoice !== null;
@@ -30,10 +30,10 @@ function Quiz({ choices, answer, twoCols, studentAnswerIdx, submit }) {
 
   const handleSubmit = useCallback(() => {
     if (!hasSelectedChoice || !submit) return;
-    submit(selectedChoice, choices[selectedChoice].isAnswer).then(() =>
-      setSubmitted(true)
+    submit(selectedChoice, choices[selectedChoice].isAnswer).finally(() =>
+      setAnswered(true)
     );
-  }, [hasSelectedChoice, submit, selectedChoice, setSubmitted]);
+  }, [hasSelectedChoice, submit, selectedChoice, setAnswered]);
 
   return (
     <>
@@ -46,19 +46,19 @@ function Quiz({ choices, answer, twoCols, studentAnswerIdx, submit }) {
             onSelected={handleChoiceSelected}
             isSelected={idx === selectedChoice}
             halfWidth={twoCols}
-            submitted={submitted}
+            submitted={answered}
           />
         ))}
       </ChoiceContainer>
       <ButtonContainer>
         <Button
-          disabled={submitted || !hasSelectedChoice}
+          disabled={answered || !hasSelectedChoice}
           onClick={handleSubmit}
         >
           Enviar
         </Button>
       </ButtonContainer>
-      <Answer data={answer} visible={submitted} />
+      <Answer data={answer} visible={answered} />
     </>
   );
 }

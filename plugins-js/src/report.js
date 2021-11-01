@@ -35,6 +35,10 @@ function sendAnswer(slug, points, test_results, student_input) {
   }).then((resp) => {
     console.log(resp);
     return resp;
+  }).catch ((t) => {
+    return new Promise((resolve, reject) => {
+      resolve({ ok: false, reason: 'CORS failed' });
+    });
   });
 }
 
