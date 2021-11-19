@@ -1,4 +1,9 @@
+import React from "react";
+import ReactDOM from "react-dom";
+import UserData from "./components/UserData";
+
 const TOKEN_KEY = "user-token";
+const USER_DATA_KEY = "user-data";
 
 export const getToken = () => {
   return localStorage.getItem(TOKEN_KEY);
@@ -6,14 +11,13 @@ export const getToken = () => {
 
 const setToken = (token) => {
   localStorage.setItem(TOKEN_KEY, token);
+  localStorage.removeItem(USER_DATA_KEY);
 };
 
 const handleTokenAndRefresh = (token) => {
   setToken(token);
-  console.log(token);
   const params = new URLSearchParams(window.location.search);
   params.delete("token");
-  console.log(params.toString(), token);
   if (!params.toString()) {
     // No more params
     const href = window.location.href;
@@ -24,9 +28,24 @@ const handleTokenAndRefresh = (token) => {
   }
 };
 
+const renderUserData = () => {
+  const userUrl = window.ihandout_config.auth["user-url"];
+  const nav = document.getElementsByClassName("md-header__inner")?.[0];
+  const containerClass = "user__container";
+  if (nav.getElementsByClassName(containerClass).length || !userUrl) return;
+
+  const root = document.createElement("div");
+  ReactDOM.render(<UserData userUrl={userUrl} />, root);
+  root.classList.add(containerClass);
+
+  nav.appendChild(root);
+};
+
 {
   const authConfig = window.ihandout_config.auth;
   if (authConfig && authConfig.url) {
+    renderUserData();
+
     const wathUrlPattern = authConfig["watch-urls"];
 
     const pathnameRegex = new RegExp(wathUrlPattern);

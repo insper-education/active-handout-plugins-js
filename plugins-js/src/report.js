@@ -1,4 +1,4 @@
-import { getToken } from "./auth.js";
+import { getToken } from "./auth";
 
 let REPORT_URL;
 if (
@@ -32,14 +32,16 @@ function sendAnswer(slug, points, test_results, student_input) {
       Authorization: "Token " + getToken(),
     },
     body: JSON.stringify(answer_data),
-  }).then((resp) => {
-    console.log(resp);
-    return resp;
-  }).catch ((t) => {
-    return new Promise((resolve, reject) => {
-      resolve({ ok: false, reason: 'CORS failed' });
+  })
+    .then((resp) => {
+      console.log(resp);
+      return resp;
+    })
+    .catch((t) => {
+      return new Promise((resolve, reject) => {
+        resolve({ ok: false, reason: "CORS failed" });
+      });
     });
-  });
 }
 
 export default { sendAnswer };
