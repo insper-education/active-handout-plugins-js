@@ -71,17 +71,9 @@ import Quiz from "./components/Quiz";
           },
           {}
         )
-        .then((res) => {
+        .finally(() => {
           localStorage[storageKey] = choice;
           multipleChoiceQuestion.dataset.answered = true;
-          if (!res.ok) {
-            notification.toast(
-              "Não foi possível enviar sua resposta. Por favor, avise os professores se o problema persistir.",
-              { bgColor: "error" }
-            );
-            return Promise.reject(res);
-          }
-          return res;
         });
     };
 

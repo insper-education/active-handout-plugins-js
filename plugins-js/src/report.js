@@ -1,4 +1,5 @@
 import { getToken } from "./auth";
+import notification from "./notification";
 
 let REPORT_URL;
 if (
@@ -38,6 +39,10 @@ function sendAnswer(slug, points, test_results, student_input) {
       return resp;
     })
     .catch((t) => {
+      notification.toast(
+        "Não foi possível enviar sua resposta. Por favor, avise os professores se o problema persistir.",
+        { bgColor: "error", timeout: 2000 }
+      );
       return new Promise((resolve, reject) => {
         resolve({ ok: false, reason: "CORS failed" });
       });
