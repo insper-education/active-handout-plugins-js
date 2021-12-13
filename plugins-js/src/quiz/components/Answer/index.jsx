@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const AnswerContainer = styled.div`
   &&& {
-    margin: 1.5rem -2rem 0;
+    margin: 1.5rem -2rem -1.2rem;
     padding: 0.5rem 2rem;
     background-color: #f3f3f3;
 
