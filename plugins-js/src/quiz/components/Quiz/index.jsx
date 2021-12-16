@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Choice from "../Choice";
-import Answer from "../Answer";
+import Answer from "../../../components/Answer";
 import Button from "../../../components/Button";
 
 const ChoiceContainer = styled.div`

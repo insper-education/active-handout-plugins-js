@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import report from "../report";
 import notification from "../notification";
 import Quiz from "./components/Quiz";
+import { parseAnswer } from "../components/Answer";
 
 {
   function parseQuestion(choicesUl) {
@@ -27,17 +28,6 @@ import Quiz from "./components/Quiz";
     });
 
     return choicesData;
-  }
-
-  function parseAnswer(answerDiv) {
-    const titleP = answerDiv.querySelector(".admonition-title");
-    const title = titleP?.textContent.trim() || "";
-    answerDiv.removeChild(titleP);
-
-    return {
-      title,
-      innerHTML: { __html: answerDiv.innerHTML },
-    };
   }
 
   const documentAddr = document.location.pathname;
