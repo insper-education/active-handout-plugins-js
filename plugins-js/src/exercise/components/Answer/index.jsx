@@ -2,17 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
-export function parseAnswer(answerDiv) {
-  const titleP = answerDiv.querySelector(".admonition-title");
-  const title = titleP?.textContent.trim() || "";
-  answerDiv.removeChild(titleP);
-
-  return {
-    title,
-    innerHTML: { __html: answerDiv.innerHTML },
-  };
-}
-
 const AnswerContainer = styled.div`
   &&& {
     margin: 1.5rem -2rem -1.2rem;

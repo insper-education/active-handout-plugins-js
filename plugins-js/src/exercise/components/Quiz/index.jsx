@@ -1,9 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Choice from "../Choice";
-import Answer from "../../../components/Answer";
-import Button from "../../../components/Button";
+import Answer from "../Answer";
+import { SubmitButton } from "../SubmitButton";
+import { ANSWER_FROM_SERVER } from "../../events";
 
 const ChoiceContainer = styled.div`
   display: flex;
@@ -12,13 +13,14 @@ const ChoiceContainer = styled.div`
   margin-bottom: 0.5rem;
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: flex-end;
-`;
-
-function Quiz({ choices, answer, twoCols, studentAnswerIdx, submit }) {
+function Quiz({
+  exerciseSlug,
+  choices,
+  answer,
+  twoCols,
+  studentAnswerIdx,
+  submit,
+}) {
   const [answered, setAnswered] = useState(!Number.isNaN(studentAnswerIdx));
   const [selectedChoice, setSelectedChoice] = useState(studentAnswerIdx);
   const hasSelectedChoice =
@@ -27,6 +29,21 @@ function Quiz({ choices, answer, twoCols, studentAnswerIdx, submit }) {
     (idx) => setSelectedChoice((current) => (current === idx ? null : idx)),
     [setSelectedChoice]
   );
+
+  const handleAnswerFromServer = useCallback((e) => {
+    if (e.detail.slug !== exerciseSlug) {
+      return;
+    }
+
+    setAnswered(true);
+    setSelectedChoice(e.detail.answer);
+  }, []);
+  useEffect(() => {
+    window.addEventListener(ANSWER_FROM_SERVER, handleAnswerFromServer);
+    return () => {
+      window.removeEventListener(ANSWER_FROM_SERVER, handleAnswerFromServer);
+    };
+  }, []);
 
   const handleSubmit = useCallback(() => {
     if (!hasSelectedChoice || !submit) return;
@@ -50,14 +67,12 @@ function Quiz({ choices, answer, twoCols, studentAnswerIdx, submit }) {
           />
         ))}
       </ChoiceContainer>
-      <ButtonContainer>
-        <Button
-          disabled={answered || !hasSelectedChoice}
-          onClick={handleSubmit}
-        >
-          Enviar
-        </Button>
-      </ButtonContainer>
+      <SubmitButton
+        disabled={answered || !hasSelectedChoice}
+        onClick={handleSubmit}
+      >
+        Enviar
+      </SubmitButton>
       <Answer data={answer} visible={answered} />
     </>
   );

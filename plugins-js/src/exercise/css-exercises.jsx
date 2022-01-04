@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { parseAnswer } from "../components/Answer/index.jsx";
-import report from "../report.js";
+import { registerAnswer, renderExercise } from "./utils.js";
 import CodePen from "./components/CodePen/index.jsx";
 
 function findExercise(container) {
@@ -23,12 +22,7 @@ function extractUserAndSlug(url) {
   return [user, slug];
 }
 
-function markAsSolved(exerciseContainer) {
-  exerciseContainer.classList.remove("question");
-  exerciseContainer.classList.add("solved");
-}
-
-function renderExercise(exerciseContainer) {
+export function renderCSSExercise(exerciseContainer, { answered }, answerData) {
   const exercise = findExercise(exerciseContainer);
   if (!exercise) {
     console.error(
@@ -42,41 +36,25 @@ function renderExercise(exerciseContainer) {
   const fullSlug = exerciseContainer.getAttribute("id");
   const exerciseSlug = fullSlug.substring(pageSlug.length);
 
-  const solvedKey = `${fullSlug}-solved`;
-  const solved = localStorage.getItem(solvedKey) === "true";
-  if (solved) {
-    markAsSolved(exerciseContainer);
-  }
+  const submit = (isCorrect) =>
+    registerAnswer(exerciseContainer, isCorrect ? 1 : 0, {}, {});
 
-  const submit = (isCorrect) => {
-    return report
-      .sendAnswer(fullSlug, isCorrect ? 1 : 0, {}, {})
-      .finally(() => {
-        localStorage[solvedKey] = "true";
-        markAsSolved(exerciseContainer);
-      });
-  };
-
-  const answerDiv = exerciseContainer.querySelector(".admonition.details");
-  let answerData;
-  if (answerDiv) {
-    answerData = parseAnswer(answerDiv);
-    exerciseContainer.removeChild(answerDiv);
-  }
-
-  const root = document.createElement("div");
-  ReactDOM.render(
+  renderExercise(
     <CodePen
       penUser={penUser}
       penSlug={penSlug}
       exerciseSlug={exerciseSlug}
       onComplete={submit}
-      solved={solved}
+      answered={answered}
       answerData={answerData}
     />,
-    root
+    exerciseContainer,
+    exercise.parentElement
   );
-  exerciseContainer.replaceChild(root, exercise.parentElement);
+}
+
+export function transformCSSExercise(serverAnswer) {
+  return serverAnswer?.submission_date;
 }
 
 function renderEmbed(embedDiv) {
@@ -96,13 +74,7 @@ function renderEmbed(embedDiv) {
 }
 
 {
-  const cssExerciseDivs = document.getElementsByClassName("css-exercise");
-  for (let cssExerciseDiv of cssExerciseDivs) {
-    renderExercise(cssExerciseDiv);
-  }
-
   const codepenEmbedDivs = document.getElementsByClassName("codepen-embed");
-  console.log(codepenEmbedDivs[0], codepenEmbedDivs[1]);
   for (let embedDiv of codepenEmbedDivs) {
     renderEmbed(embedDiv);
   }

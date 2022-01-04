@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import Answer from "../../../components/Answer";
+import Answer from "../Answer";
 
 export default function CodePen({
   penUser,
   penSlug,
   exerciseSlug,
   onComplete,
-  solved,
+  initialAnswered,
   answerData,
 }) {
-  const [answered, setAnswered] = useState(!!solved);
+  const [answered, setAnswered] = useState(!!initialAnswered);
   useEffect(() => {
     window.addEventListener(
       "message",

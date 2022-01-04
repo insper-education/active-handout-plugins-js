@@ -1,5 +1,5 @@
-import "./css-exercises";
-import "./quiz";
+import "./counter";
+import "./translator";
+import "./exercise";
 import "./progress-check";
-import "./text-question";
 import "./video";

@@ -19,15 +19,15 @@ const CheckpointContainer = styled.div`
   }
 
   const clickHandlers = {};
-  allCheckpoints.forEach((item, k) => {
-    const text = item.querySelector("p:not(.admonition-title)").innerText;
+  allCheckpoints.forEach((checkpoint, k) => {
+    const text = checkpoint.querySelector("p:not(.admonition-title)").innerText;
 
     const storageKey = getStorageKey(docAddr, k);
     const root = document.createElement("div");
     clickHandlers[storageKey] = makeHandleShowNext(
       root,
       storageKey,
-      item.classList.contains("replace-by-line"),
+      checkpoint.classList.contains("replace-by-line"),
       false
     );
     ReactDOM.render(
@@ -38,8 +38,8 @@ const CheckpointContainer = styled.div`
     );
 
     root.classList.add("checkpoint");
-    root.style.display = item.style.display;
-    item.parentElement.replaceChild(root, item);
+    root.style.display = checkpoint.style.display;
+    checkpoint.parentElement.replaceChild(root, checkpoint);
   });
 
   const allCheckpointContainers = document.querySelectorAll(".checkpoint");
@@ -74,7 +74,7 @@ function showNextSiblingsUntilCheckpoint(element) {
   }
 }
 
-function hasPreviouslyUnansweredQuestion(element) {
+function hasPreviouslyUnansweredExercise(element) {
   let prev = element.previousElementSibling;
   while (prev != null) {
     if (prev.dataset.answered === "false") {
@@ -87,7 +87,7 @@ function hasPreviouslyUnansweredQuestion(element) {
 
 function makeHandleShowNext(root, storageKey, replaceByLine, answerRequired) {
   return () => {
-    if (answerRequired && hasPreviouslyUnansweredQuestion(root)) {
+    if (answerRequired && hasPreviouslyUnansweredExercise(root)) {
       notification.toast(
         "Por favor, responda todas as questões antes de continuar.",
         { timeout: 1000 }
