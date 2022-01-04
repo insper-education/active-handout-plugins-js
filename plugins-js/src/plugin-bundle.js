@@ -3,3 +3,4 @@ import "./translator";
 import "./exercise";
 import "./progress-check";
 import "./video";
+import "./calendar";
