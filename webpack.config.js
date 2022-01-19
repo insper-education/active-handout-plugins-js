@@ -4,7 +4,7 @@ const path = require("path");
 module.exports = {
   entry: path.join(__dirname, "src", "plugin-bundle.js"),
   output: {
-    path: path.resolve(__dirname, "..", "content"),
+    path: path.resolve(__dirname, "package"),
     filename: "plugin-bundle.js",
   },
   mode: "production",
