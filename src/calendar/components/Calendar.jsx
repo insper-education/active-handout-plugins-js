@@ -5,6 +5,19 @@ import yaml from "js-yaml";
 import ChevronLeft from "../../components/icons/ChevronLeft";
 import ChevronRight from "../../components/icons/ChevronRight";
 
+let current_document = window.location.href;
+let last_slash = current_document.lastIndexOf("/");
+
+let CALENDAR_PATH = "";
+if (last_slash == current_document.length-1) {
+    CALENDAR_PATH = current_document + "calendar.yml";
+} else {
+    CALENDAR_PATH = current_document.substring(0, last_slash) + "calendar.yml";
+}
+
+var getUrl = window.location;
+var SITE_PATH = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+
 const Comment = styled.span`
   && {
     display: flex;
@@ -201,7 +214,7 @@ function makeTileContent(data) {
               return (
                 <Badge type={type} key={`badge__${name}`}>
                   {type === "test" && <span>{name}</span>}
-                  {type !== "test" && <a href={`/DevLife/${link}`}>{name}</a>}
+                  {type !== "test" && <a href={SITE_PATH+`/${link}`}>{name}</a>}
                 </Badge>
               );
             })}
@@ -237,7 +250,7 @@ export default function Calendar() {
   const now = new Date();
 
   useEffect(() => {
-    fetch("/DevLife/calendar.yml")
+    fetch(CALENDAR_PATH)
       .then((res) => res.text())
       .then((text) => {
         const data = yaml.load(text);
