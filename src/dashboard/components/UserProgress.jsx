@@ -8,9 +8,21 @@ import { computePoints } from "../../exercise/utils";
 import { useCalendarData } from "../../services/calendar";
 
 const CardContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 0.8rem;
+  grid-template-columns: auto;
+
+  @media (min-width: 520px) {
+    grid-template-columns: auto auto;
+  }
+
+  @media (min-width: 780px) {
+    grid-template-columns: auto auto auto;
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: auto auto auto auto;
+  }
 `;
 
 const colorByCompetence = {
@@ -25,7 +37,6 @@ const TopicCard = styled.div`
     colorByCompetence[competence] || "#f3f3f3"};
   border-radius: 0.5rem;
   padding: 1rem;
-  width: max(15rem, 22%);
 `;
 
 const TopicName = styled.span`
@@ -110,9 +121,9 @@ export default function UserProgress() {
 
   return (
     <>
+      {/* {JSON.stringify(calendarData?.calendar)}
+      {JSON.stringify(sortedTopics?.map((topic) => topic.name))} */}
       <CardContainer>
-        {JSON.stringify(calendarData?.calendar)}
-        {JSON.stringify(sortedTopics?.map((topic) => topic.name))}
         {sortedTopics &&
           sortedTopics.map((topic) => (
             <Topic
