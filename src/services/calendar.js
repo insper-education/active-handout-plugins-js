@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from "react";
+import yaml from "js-yaml";
 
-let currentDocument = window.location.href;
-let lastSlash = currentDocument.lastIndexOf("/");
-
-let CALENDAR_PATH = "";
-if (lastSlash == currentDocument.length - 1) {
-  CALENDAR_PATH = currentDocument + "calendar.yml";
-} else {
-  CALENDAR_PATH = currentDocument.substring(0, lastSlash) + "calendar.yml";
-}
+const MOUNT_POINT = window.ihandout_config["mount-point"];
+const CALENDAR_PATH = MOUNT_POINT + "calendar.yml";
 
 function parseDate(dateStr) {
   const parts = dateStr.split("/");

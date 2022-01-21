@@ -5,6 +5,7 @@ import { fetchAnswerSummaries } from "../../exercise/components/HandoutProgress/
 import { fetchExerciseDetails } from "./exercise";
 import CircularProgressBar from "../../components/CircularProgressBar";
 import { computePoints } from "../../exercise/utils";
+import { useCalendarData } from "../../services/calendar";
 
 const CardContainer = styled.div`
   display: flex;
@@ -94,12 +95,26 @@ export default function UserProgress() {
   const { data: topics } = useQuery("/exercise-details/", () =>
     fetchExerciseDetails()
   );
+  const calendarData = useCalendarData();
+
+  const [sortedTopics, setSortedTopics] = useState(null);
+  useEffect(() => {
+    if (!topics || !calendarData) {
+      setSortedTopics(topics);
+      return;
+    }
+
+    // topics.map(topic => )
+    setSortedTopics(topics);
+  }, [topics, calendarData]);
 
   return (
     <>
       <CardContainer>
-        {topics &&
-          topics.map((topic) => (
+        {JSON.stringify(calendarData?.calendar)}
+        {JSON.stringify(sortedTopics?.map((topic) => topic.name))}
+        {sortedTopics &&
+          sortedTopics.map((topic) => (
             <Topic
               key={`topic--${topic.name}`}
               topic={topic}

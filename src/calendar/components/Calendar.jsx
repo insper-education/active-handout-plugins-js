@@ -1,17 +1,14 @@
 import React, { useEffect, useState, useMemo } from "react";
 import styled from "styled-components";
 import ReactCalendar from "react-calendar";
-import yaml from "js-yaml";
 import ChevronLeft from "../../components/icons/ChevronLeft";
 import ChevronRight from "../../components/icons/ChevronRight";
 import { useCalendarData } from "../../services/calendar";
 
-var getUrl = window.location;
-var SITE_PATH =
-  getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split("/")[1];
+const MOUNT_POINT = window.ihandout_config["mount-point"];
 
 const Comment = styled.span`
-  && {
+  .md-typeset && {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -21,84 +18,34 @@ const Comment = styled.span`
 `;
 
 const BadgeList = styled.ul`
-  && {
+  .md-typeset && {
     width: 100%;
     margin-left: 0;
     list-style-type: none;
   }
 `;
 
-const badgeColors = {
-  handoutPython: {
-    default: "rgba(255, 242, 204, 1)",
-    hover: "rgba(255, 242, 204, 0.8)",
-  },
-  handoutDesign: {
-    default: "rgba(227, 240, 218, 1)",
-    hover: "rgba(227, 240, 218, 0.8)",
-  },
-  handoutPygame: {
-    default: "rgba(252, 228, 214, 1)",
-    hover: "rgba(252, 228, 214, 0.8)",
-  },
-  handoutDjango: {
-    default: "rgba(218, 225, 243, 1)",
-    hover: "rgba(218, 225, 243, 0.8)",
-  },
-  shortAssignment: {
-    default: "#F58220",
-    hover: "#FAA61A",
-  },
-  assignment: {
-    default: "#A62B4D",
-    hover: "#C43150",
-  },
-  test: {
-    default: "#414042",
-    hover: "#414042",
-  },
-};
-function badgeTextColor(badgeType) {
-  if (badgeType.indexOf("handout") >= 0) {
-    return "#252629";
-  }
-  return "#fafafa";
-}
-const translations = {
-  handoutPython: "Handout Python",
-  handoutDesign: "Handout Design/Liderança/Desenvolvimento ágil",
-  handoutPygame: "Handout Pygame",
-  handoutDjango: "Handout Django",
-  shortAssignment: "Tarefa curta",
-  assignment: "Tarefa longa",
-  test: "Avaliação",
-};
-const legendData = Object.keys(badgeColors).map((name) => [
-  translations[name],
-  badgeColors[name].default,
-]);
-
 const Badge = styled.li`
-  && {
+  .md-typeset && {
     margin: 0 0 0.2rem;
     overflow: hidden;
     border-radius: 1rem;
-    background-color: ${(props) => badgeColors[props.type]?.default};
+    background-color: ${(props) => props.dtype?.color?.default};
     padding: 0.3rem 0.05rem;
 
     :hover {
-      background-color: ${(props) => badgeColors[props.type]?.hover};
+      background-color: ${(props) => props.dtype?.color?.hover};
     }
 
     span,
     a {
-      color: ${(props) => badgeTextColor(props.type)};
+      color: ${(props) => props.dtype?.textColor};
     }
   }
 `;
 
 const LegendContainer = styled.ul`
-  && {
+  .md-typeset && {
     margin: 0;
     padding: 0.2rem 0;
     list-style-type: none;
@@ -113,7 +60,7 @@ const LegendTitle = styled.label`
 `;
 
 const LegendItem = styled.li`
-  && {
+  .md-typeset && {
     margin-left: 0;
     margin-bottom: 0.5rem;
     display: flex;
@@ -127,7 +74,7 @@ const LegendItem = styled.li`
     height: 1rem;
     content: "";
     background-color: ${(props) => props.color};
-    margin-right: 0.1rem;
+    margin-right: 0.4rem;
   }
 `;
 
@@ -150,53 +97,21 @@ function makeTileContent(data) {
     if (!dayData) {
       return "";
     }
-    const {
-      handoutsPython,
-      handoutsDesign,
-      handoutsPygame,
-      handoutsDjango,
-      assignments,
-      shortAssignments,
-      tests,
-      comment,
-    } = dayData;
-    let badges = [];
-    if (handoutsPython) {
-      badges = badges.concat(handoutsPython.map((h) => [h, "handoutPython"]));
-    }
-    if (handoutsDesign) {
-      badges = badges.concat(handoutsDesign.map((h) => [h, "handoutDesign"]));
-    }
-    if (handoutsPygame) {
-      badges = badges.concat(handoutsPygame.map((h) => [h, "handoutPygame"]));
-    }
-    if (handoutsDjango) {
-      badges = badges.concat(handoutsDjango.map((h) => [h, "handoutDjango"]));
-    }
-    if (shortAssignments) {
-      badges = badges.concat(
-        shortAssignments.map((s) => [s, "shortAssignment"])
-      );
-    }
-    if (assignments) {
-      badges = badges.concat(assignments.map((a) => [a, "assignment"]));
-    }
-    if (tests) {
-      badges = badges.concat(tests.map((t) => [{ [t]: null }, "test"]));
-    }
+    const { badges, comment } = dayData;
 
     return (
       <>
-        {!!badges.length && (
+        {!!badges?.length && (
           <BadgeList>
-            {badges.map(([entry, type]) => {
-              const [name, link] = Object.entries(entry)[0];
+            {badges.map((badge) => {
+              const label = badge.label;
+              const uri = badge.uri;
+              const dtype = data.dtypes[badge.dtype];
+
               return (
-                <Badge type={type} key={`badge__${name}`}>
-                  {type === "test" && <span>{name}</span>}
-                  {type !== "test" && (
-                    <a href={SITE_PATH + `/${link}`}>{name}</a>
-                  )}
+                <Badge dtype={dtype} key={`badge__${label}`}>
+                  {!uri && <span>{label}</span>}
+                  {!!uri && <a href={MOUNT_POINT + `${uri}`}>{label}</a>}
                 </Badge>
               );
             })}
@@ -236,6 +151,13 @@ export default function Calendar() {
   }, [data]);
   const tileDisabled = useMemo(() => {
     return makeTileDisabled(data);
+  }, [data]);
+
+  const legendData = useMemo(() => {
+    if (!data?.dtypes) return [];
+
+    const dtypes = Object.values(data.dtypes);
+    return dtypes.map((meta) => [meta.title, meta.color.default]);
   }, [data]);
 
   if (!data) {
