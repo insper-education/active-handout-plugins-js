@@ -25,16 +25,9 @@ const CardContainer = styled.div`
   }
 `;
 
-const colorByCompetence = {
-  python: "rgba(255, 242, 204, 1)",
-  design: "rgba(227, 240, 218, 1)",
-  pygame: "rgba(252, 228, 214, 1)",
-  django: "rgba(218, 225, 243, 1)",
-};
-
 const TopicCard = styled.div`
   background-color: ${({ competence }) =>
-    colorByCompetence[competence] || "#f3f3f3"};
+    competence?.color?.default || "#f3f3f3"};
   border-radius: 0.5rem;
   padding: 1rem;
   display: flex;
@@ -63,9 +56,7 @@ const ProgressTitle = styled.span`
   display: block;
 `;
 
-function Topic({ topic, summariesBySlug }) {
-  const competence = topic.getCompetence();
-
+function Topic({ topic, competence, summariesBySlug }) {
   const [handoutTotal, setHandoutTotal] = useState(0);
   const [handoutPoints, setHandoutPoints] = useState(0);
   const [extraTotal, setExtraTotal] = useState(0);
@@ -129,13 +120,18 @@ export default function UserProgress() {
       {JSON.stringify(sortedTopics?.map((topic) => topic.name))} */}
       <CardContainer>
         {sortedTopics &&
-          sortedTopics.map((topic) => (
-            <Topic
-              key={`topic--${topic.name}`}
-              topic={topic}
-              summariesBySlug={summariesBySlug}
-            />
-          ))}
+          sortedTopics.map((topic) => {
+            const competenceName = topic.getCompetence();
+            const competence = calendarData?.dtypes?.[competenceName];
+            return (
+              <Topic
+                key={`topic--${topic.name}`}
+                topic={topic}
+                competence={competence}
+                summariesBySlug={summariesBySlug}
+              />
+            );
+          })}
       </CardContainer>
     </>
   );
