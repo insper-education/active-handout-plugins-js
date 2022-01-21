@@ -5,18 +5,19 @@ import yaml from "js-yaml";
 import ChevronLeft from "../../components/icons/ChevronLeft";
 import ChevronRight from "../../components/icons/ChevronRight";
 
-let current_document = window.location.href;
-let last_slash = current_document.lastIndexOf("/");
+let currentDocument = window.location.href;
+let lastSlash = currentDocument.lastIndexOf("/");
 
 let CALENDAR_PATH = "";
-if (last_slash == current_document.length-1) {
-    CALENDAR_PATH = current_document + "calendar.yml";
+if (lastSlash == currentDocument.length - 1) {
+  CALENDAR_PATH = currentDocument + "calendar.yml";
 } else {
-    CALENDAR_PATH = current_document.substring(0, last_slash) + "calendar.yml";
+  CALENDAR_PATH = currentDocument.substring(0, lastSlash) + "calendar.yml";
 }
 
 var getUrl = window.location;
-var SITE_PATH = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+var SITE_PATH =
+  getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split("/")[1];
 
 const Comment = styled.span`
   && {
@@ -214,7 +215,9 @@ function makeTileContent(data) {
               return (
                 <Badge type={type} key={`badge__${name}`}>
                   {type === "test" && <span>{name}</span>}
-                  {type !== "test" && <a href={SITE_PATH+`/${link}`}>{name}</a>}
+                  {type !== "test" && (
+                    <a href={SITE_PATH + `/${link}`}>{name}</a>
+                  )}
                 </Badge>
               );
             })}
