@@ -12,15 +12,15 @@ const CardContainer = styled.div`
   gap: 0.8rem;
   grid-template-columns: auto;
 
-  @media (min-width: 520px) {
+  @media (min-width: 560px) {
     grid-template-columns: auto auto;
   }
 
-  @media (min-width: 780px) {
+  @media (min-width: 820px) {
     grid-template-columns: auto auto auto;
   }
 
-  @media (min-width: 1024px) {
+  @media (min-width: 1080px) {
     grid-template-columns: auto auto auto auto;
   }
 `;
@@ -37,17 +37,21 @@ const TopicCard = styled.div`
     colorByCompetence[competence] || "#f3f3f3"};
   border-radius: 0.5rem;
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
 `;
 
 const TopicName = styled.span`
   display: block;
+  flex-grow: 1;
   font-size: 1.2em;
   font-weight: bold;
+  border-bottom: 1px solid #3d3d3d3d;
 `;
 
 const ProgressSetContainer = styled.div`
   display: flex;
-  gap: 1rem;
+  gap: 2rem;
   margin-top: 0.8rem;
 `;
 
