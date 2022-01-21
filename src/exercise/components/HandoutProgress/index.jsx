@@ -1,14 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useQuery, useQueryClient } from "react-query";
-import {
-  buildStyles,
-  CircularProgressbarWithChildren,
-} from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
 import { fetchAnswerSummaries } from "./services";
 import { ANSWER_SUBMITTED } from "../../events";
-import { ExerciseType, getExerciseType } from "../../utils";
+import { ExerciseType, computePoints } from "../../utils";
+import CircularProgressBar from "../../../components/CircularProgressBar";
 
 const ProgressContainer = styled.div`
   position: sticky;
@@ -29,55 +25,6 @@ const ProgressContainer = styled.div`
     margin-bottom: 0.5rem;
   }
 `;
-
-const Percentage = styled.span`
-  display: block;
-  font-size: 2.5rem;
-  line-height: 1;
-  color: #27a5a2;
-
-  &:after {
-    content: "%";
-    font-size: 1.5rem;
-  }
-`;
-
-const ExerciseCount = styled.span`
-  display: block;
-  font-size: 0.8rem;
-  line-height: 1;
-  text-align: center;
-  color: #7f7f7f;
-`;
-
-function ProgressContent({ points, total }) {
-  const percentage = (100 * points) / total;
-  return (
-    <div>
-      <Percentage>{Math.round(percentage)}</Percentage>
-      <ExerciseCount>
-        {points}/{total}
-      </ExerciseCount>
-    </div>
-  );
-}
-
-function pointsFromSummary(summary) {
-  if (!summary) {
-    return 0;
-  }
-  const slug = summary.exercise_slug;
-  const container = document.getElementById(slug);
-  if (!container) {
-    return 0;
-  }
-
-  const exerciseType = getExerciseType(container);
-  if (exerciseType === ExerciseType.CODE || exerciseType === ExerciseType.CSS) {
-    return summary.max_points;
-  }
-  return summary.answer_count > 0;
-}
 
 export function HandoutProgress({ exerciseSlugs }) {
   const queryClient = useQueryClient();
@@ -102,25 +49,13 @@ export function HandoutProgress({ exerciseSlugs }) {
     if (!exerciseSlugs || !summariesBySlug) {
       return;
     }
-    const summaries = exerciseSlugs.map((slug) => summariesBySlug[slug]);
-    setPoints(summaries.map(pointsFromSummary).reduce((a, b) => a + b, 0));
+    setPoints(computePoints(exerciseSlugs, summariesBySlug));
   }, [exerciseSlugs, summariesBySlug]);
 
-  const percentage = (100 * points) / total;
   return (
     <ProgressContainer>
       <label>Progresso</label>
-      <CircularProgressbarWithChildren
-        value={percentage}
-        styles={buildStyles({
-          // Colors
-          pathColor: "#27a5a2",
-          textColor: "#27a5a2",
-          trailColor: "#d6d6d6",
-        })}
-      >
-        <ProgressContent points={points} total={total} />
-      </CircularProgressbarWithChildren>
+      <CircularProgressBar current={points} total={total} />
     </ProgressContainer>
   );
 }

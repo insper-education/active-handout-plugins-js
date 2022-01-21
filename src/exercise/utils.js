@@ -131,3 +131,22 @@ export function getExerciseType(exerciseContainer) {
     return ExerciseType.SELF;
   }
 }
+
+export function pointsFromSummary(summary) {
+  if (!summary) {
+    return 0;
+  }
+  const exerciseType = summary.exercise_type;
+  if (exerciseType === ExerciseType.CODE || exerciseType === ExerciseType.CSS) {
+    return summary.max_points;
+  }
+  return summary.answer_count > 0;
+}
+
+export function computePoints(exerciseSlugs, summariesBySlug) {
+  if (!summariesBySlug) return 0;
+  const summaries = exerciseSlugs
+    .map((slug) => summariesBySlug[slug])
+    .filter((s) => !!s);
+  return summaries.map(pointsFromSummary).reduce((a, b) => a + b, 0);
+}

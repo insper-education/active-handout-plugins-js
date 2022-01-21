@@ -7,6 +7,15 @@ module.exports = {
     path: path.resolve(__dirname, "package"),
     filename: "plugin-bundle.js",
   },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, "package"),
+    },
+    hot: false,
+    liveReload: false,
+    compress: false,
+    port: 9000,
+  },
   mode: "production",
   module: {
     rules: [
@@ -26,7 +35,7 @@ module.exports = {
       },
     ],
   },
-  devtool: 'source-map',
+  devtool: "source-map",
   resolve: {
     extensions: [".js", ".jsx"],
     alias: {

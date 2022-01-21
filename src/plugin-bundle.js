@@ -1,4 +1,5 @@
 import "./counter";
+import "./dashboard";
 import "./translator";
 import "./exercise";
 import "./progress-check";
