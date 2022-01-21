@@ -4,16 +4,7 @@ import ReactCalendar from "react-calendar";
 import yaml from "js-yaml";
 import ChevronLeft from "../../components/icons/ChevronLeft";
 import ChevronRight from "../../components/icons/ChevronRight";
-
-let currentDocument = window.location.href;
-let lastSlash = currentDocument.lastIndexOf("/");
-
-let CALENDAR_PATH = "";
-if (lastSlash == currentDocument.length - 1) {
-  CALENDAR_PATH = currentDocument + "calendar.yml";
-} else {
-  CALENDAR_PATH = currentDocument.substring(0, lastSlash) + "calendar.yml";
-}
+import { useCalendarData } from "../../services/calendar";
 
 var getUrl = window.location;
 var SITE_PATH =
@@ -140,18 +131,6 @@ const LegendItem = styled.li`
   }
 `;
 
-function parseDate(dateStr) {
-  const parts = dateStr.split("/");
-  const [day, month, year] = parts.map((s) => parseInt(s));
-  return new Date(year, month - 1, day);
-}
-
-function prepareData(data) {
-  data.start = parseDate(data.start);
-  data.end = parseDate(data.end);
-  return data;
-}
-
 function formatDate(date) {
   return date.toLocaleDateString("pt-BR", {
     year: "numeric",
@@ -249,17 +228,8 @@ function Legend({ label, color }) {
 }
 
 export default function Calendar() {
-  const [data, setData] = useState(null);
+  const data = useCalendarData();
   const now = new Date();
-
-  useEffect(() => {
-    fetch(CALENDAR_PATH)
-      .then((res) => res.text())
-      .then((text) => {
-        const data = yaml.load(text);
-        setData(prepareData(data));
-      });
-  }, []);
 
   const tileContent = useMemo(() => {
     return makeTileContent(data);
