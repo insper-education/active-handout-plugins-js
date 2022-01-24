@@ -78,12 +78,15 @@ const LegendItem = styled.li`
   }
 `;
 
-function formatDate(date) {
-  return date.toLocaleDateString("pt-BR", {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-  });
+export function formatDate(date, config) {
+  if (!config) {
+    config = {
+      day: "numeric",
+      month: "numeric",
+      year: "numeric",
+    };
+  }
+  return date.toLocaleDateString("pt-BR", config);
 }
 
 function makeTileContent(data) {

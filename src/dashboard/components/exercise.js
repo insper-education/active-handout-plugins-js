@@ -1,3 +1,5 @@
+import { parseDate } from "../../services/calendar";
+
 export function fetchExerciseDetails() {
   return fetch("/DevLife/exercises.json")
     .then((res) => res.json())
@@ -5,10 +7,14 @@ export function fetchExerciseDetails() {
     .catch((err) => console.error(err));
 }
 
-class Topic {
-  constructor(name) {
+export class Topic {
+  constructor(name, exercises, badge) {
     this.name = name;
-    this.exercises = [];
+    this.exercises = exercises || [];
+    this.label = badge?.label;
+    this.date = badge?.date ? parseDate(badge?.date) : null;
+    this.dtype = badge?.dtype;
+    this.uri = badge?.uri;
   }
 
   addExercise(exercise) {
@@ -24,8 +30,14 @@ class Topic {
   }
 
   getCompetence() {
-    return this.name.split("/")[0];
+    return this.dtype || this.name.split("/")[0];
   }
+}
+
+export function compareTopicsByDate(topic1, topic2) {
+  if (!topic2?.date) return -1;
+  if (!topic1?.date) return 1;
+  return topic1.date.getTime() - topic2.date.getTime();
 }
 
 function hydrateExercises(exercises) {

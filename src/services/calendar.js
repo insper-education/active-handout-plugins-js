@@ -4,7 +4,7 @@ import yaml from "js-yaml";
 const MOUNT_POINT = window.ihandout_config["mount-point"];
 const CALENDAR_PATH = MOUNT_POINT + "calendar.yml";
 
-function parseDate(dateStr) {
+export function parseDate(dateStr) {
   const parts = dateStr.split("/");
   const [day, month, year] = parts.map((s) => parseInt(s));
   return new Date(year, month - 1, day);
