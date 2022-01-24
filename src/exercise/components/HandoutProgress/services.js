@@ -56,7 +56,7 @@ export function fetchAnswerSummaries(exerciseSlugs) {
       const summariesBySlug = Object.fromEntries(
         summaries.map((summary) => [summary.exercise_slug, summary])
       );
-      checkForUpdates(summariesBySlug, exerciseSlugs);
+      exerciseSlugs && checkForUpdates(summariesBySlug, exerciseSlugs);
       return summariesBySlug;
     })
     .catch((err) => console.error(err));
