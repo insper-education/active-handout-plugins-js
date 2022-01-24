@@ -151,8 +151,8 @@ function Topic({ topic, competence, summariesBySlug }) {
   );
 }
 
-function findBadgeForTopic(topic, badges) {
-  return badges.filter((badge) => badge.uri.indexOf(topic.name) >= 0)?.[0];
+function findTopicForBadge(badge, topics) {
+  return topics.filter((topic) => badge.uri.indexOf(topic.name) >= 0)?.[0];
 }
 
 function extractBadgesWithDate(calendarData) {
@@ -170,10 +170,12 @@ function sortTopicsByDate(topics, calendarData) {
   }
 
   const badgesWithDate = extractBadgesWithDate(calendarData);
-  const sorted = topics.map((topic) => {
-    const badge = findBadgeForTopic(topic, badgesWithDate);
-    return new ExerciseTopic(topic.name, topic.exercises, badge);
-  });
+  const sorted = badgesWithDate
+    .map((badge) => {
+      const topic = findTopicForBadge(badge, topics);
+      if (topic) return new ExerciseTopic(topic.name, topic.exercises, badge);
+    })
+    .filter((topic) => !!topic);
   sorted.sort(compareTopicsByDate);
   return sorted;
 }
