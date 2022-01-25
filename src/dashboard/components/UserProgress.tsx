@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import { fetchAnswerSummaries } from "../../exercise/components/HandoutProgress/services";
+import {
+  fetchAnswerSummaries,
+  IExerciseSummary,
+} from "../../exercise/components/HandoutProgress/services";
 import {
   compareTopicsByDate,
   fetchExerciseDetails,
@@ -9,7 +12,13 @@ import {
 } from "./exercise";
 import ProgressBar from "../../components/ProgressBar";
 import { computePoints } from "../../exercise/utils";
-import { useCalendarData } from "../../services/calendar";
+import {
+  ICalendarBadge,
+  ICalendarData,
+  IDayEntry,
+  IDType,
+  useCalendarData,
+} from "../../services/calendar";
 import { formatDate } from "../../calendar/components/Calendar";
 
 const CardContainer = styled.div`
@@ -30,7 +39,11 @@ const CardContainer = styled.div`
   }
 `;
 
-const TopicCard = styled.a`
+interface ITopicCardProps {
+  competence?: IDType;
+}
+
+const TopicCard = styled.a<ITopicCardProps>`
   && {
     background-color: ${({ competence }) =>
       competence?.color?.default || "#f3f3f3"};
@@ -97,7 +110,13 @@ const ProgressTitle = styled.span`
   display: block;
 `;
 
-function Topic({ topic, competence, summariesBySlug }) {
+interface ITopicProps {
+  topic: ExerciseTopic;
+  competence?: IDType;
+  summariesBySlug?: Map<string, IExerciseSummary> | null;
+}
+
+function Topic({ topic, competence, summariesBySlug }: ITopicProps) {
   const [handoutTotal, setHandoutTotal] = useState(0);
   const [handoutPoints, setHandoutPoints] = useState(0);
   const [extraTotal, setExtraTotal] = useState(0);
@@ -151,20 +170,27 @@ function Topic({ topic, competence, summariesBySlug }) {
   );
 }
 
-function findTopicForBadge(badge, topics) {
-  return topics.filter((topic) => badge.uri.indexOf(topic.name) >= 0)?.[0];
+function findTopicForBadge(badge: ICalendarBadge, topics: ExerciseTopic[]) {
+  console.log(badge.uri, topics);
+  const topic = topics.filter(
+    (topic) => badge.uri && badge.uri.indexOf(topic.name) >= 0
+  )[0];
+  return topic;
 }
 
-function extractBadgesWithDate(calendarData) {
+function extractBadgesWithDate(calendarData: ICalendarData): ICalendarBadge[] {
   return Object.entries(calendarData.calendar)
-    .map(([date, data]) =>
+    .map(([date, data]: [Date | string, IDayEntry]) =>
       data?.badges?.map((d) => ({ ...d, date })).filter((d) => !!d?.uri)
     )
     .flat()
-    .filter((badge) => !!badge);
+    .filter((badge) => !!badge) as ICalendarBadge[];
 }
 
-function sortTopicsByDate(topics, calendarData) {
+function sortTopicsByDate(
+  topics: ExerciseTopic[] | null,
+  calendarData: ICalendarData | null
+): ExerciseTopic[] | null {
   if (!topics || !calendarData) {
     return topics;
   }
@@ -175,7 +201,7 @@ function sortTopicsByDate(topics, calendarData) {
       const topic = findTopicForBadge(badge, topics);
       if (topic) return new ExerciseTopic(topic.name, topic.exercises, badge);
     })
-    .filter((topic) => !!topic);
+    .filter((topic) => !!topic) as ExerciseTopic[];
   sorted.sort(compareTopicsByDate);
   return sorted;
 }
@@ -189,16 +215,20 @@ export default function UserProgress() {
   );
   const calendarData = useCalendarData();
 
-  const [sortedTopics, setSortedTopics] = useState(null);
+  const [sortedTopics, setSortedTopics] = useState<ExerciseTopic[] | null>(
+    null
+  );
   useEffect(() => {
-    setSortedTopics(sortTopicsByDate(topics, calendarData));
+    setSortedTopics(
+      sortTopicsByDate(topics as ExerciseTopic[] | null, calendarData)
+    );
   }, [topics, calendarData]);
 
   return (
     <>
       <CardContainer>
         {sortedTopics &&
-          sortedTopics.map((topic) => {
+          sortedTopics.map((topic: ExerciseTopic) => {
             const competenceName = topic.getCompetence();
             const competence = calendarData?.dtypes?.[competenceName];
             return (

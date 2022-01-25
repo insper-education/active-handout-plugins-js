@@ -19,13 +19,22 @@ module.exports = {
   mode: "production",
   module: {
     rules: [
+      // {
+      //   test: /\.?(jsx|js|tsx|ts)$/,
+      //   use: "ts-loader",
+      //   exclude: /node_modules/,
+      // },
       {
-        test: /\.?(jsx|js)$/,
+        test: /\.?(tsx|ts|jsx|js)$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
           options: {
-            presets: ["@babel/preset-env", "@babel/preset-react"],
+            presets: [
+              "@babel/preset-env",
+              "@babel/preset-react",
+              "@babel/typescript",
+            ],
           },
         },
       },
@@ -37,7 +46,7 @@ module.exports = {
   },
   devtool: "source-map",
   resolve: {
-    extensions: [".js", ".jsx"],
+    extensions: [".ts", ".tsx", ".js", ".jsx"],
     alias: {
       react: "preact/compat",
       "react-dom/test-utils": "preact/test-utils",
