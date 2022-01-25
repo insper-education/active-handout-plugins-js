@@ -146,7 +146,7 @@ export function pointsFromSummary(summary) {
 export function computePoints(exerciseSlugs, summariesBySlug) {
   if (!summariesBySlug) return 0;
   const summaries = exerciseSlugs
-    .map((slug) => summariesBySlug[slug])
+    .map((slug) => summariesBySlug.get(slug))
     .filter((s) => !!s);
   return summaries.map(pointsFromSummary).reduce((a, b) => a + b, 0);
 }

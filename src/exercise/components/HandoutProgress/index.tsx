@@ -26,7 +26,11 @@ const ProgressContainer = styled.div`
   }
 `;
 
-export function HandoutProgress({ exerciseSlugs }) {
+interface IHandoutProgressProps {
+  exerciseSlugs?: string[];
+}
+
+export function HandoutProgress({ exerciseSlugs }: IHandoutProgressProps) {
   const queryClient = useQueryClient();
   const { data: summariesBySlug } = useQuery("/summaries/", () =>
     fetchAnswerSummaries(exerciseSlugs)
@@ -44,7 +48,7 @@ export function HandoutProgress({ exerciseSlugs }) {
   }, []);
 
   const [points, setPoints] = useState(0);
-  const total = exerciseSlugs.length;
+  const total = exerciseSlugs?.length || 0;
   useEffect(() => {
     if (!exerciseSlugs || !summariesBySlug) {
       return;

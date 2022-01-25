@@ -13,9 +13,12 @@ import {
   setPreviousAnswer,
 } from "../../utils";
 
-function checkForUpdates(summariesBySlug, exerciseSlugs) {
+function checkForUpdates(
+  summariesBySlug: Map<string, IExerciseSummary>,
+  exerciseSlugs: string[]
+) {
   for (let slug of exerciseSlugs) {
-    const summary = summariesBySlug[slug];
+    const summary = summariesBySlug.get(slug);
     if (!summary) {
       continue;
     }
@@ -28,21 +31,34 @@ function checkForUpdates(summariesBySlug, exerciseSlugs) {
 }
 
 function getUser() {
-  return JSON.parse(localStorage.getItem("user-data"));
+  return JSON.parse(localStorage.getItem("user-data") || "");
 }
 
 function getToken() {
   return localStorage.getItem("user-token");
 }
 
-export function fetchAnswerSummaries(exerciseSlugs) {
+export interface IExerciseSummary {
+  pk: number;
+  user: number;
+  exercise: number;
+  exercise_slug: string;
+  exercise_type: string;
+  max_points: number;
+  answer_count: number;
+  latest: number;
+}
+
+export function fetchAnswerSummaries(
+  exerciseSlugs?: string[]
+): Promise<Map<string, IExerciseSummary> | null> {
   const user = getUser();
   const token = getToken();
   if (!user || !token) {
-    return null;
+    return Promise.resolve(null);
   }
 
-  const summariesUrl = `${window.ihandout_config.report["api-base"]}summaries/?user=${user.pk}`;
+  const summariesUrl = `${window.ihandout_config.report?.["api-base"]}summaries/?user=${user.pk}`;
 
   return fetch(summariesUrl, {
     mode: "cors",
@@ -52,14 +68,17 @@ export function fetchAnswerSummaries(exerciseSlugs) {
     },
   })
     .then((res) => res.json())
-    .then((summaries) => {
-      const summariesBySlug = Object.fromEntries(
+    .then((summaries: IExerciseSummary[]) => {
+      const summariesBySlug = new Map<string, IExerciseSummary>(
         summaries.map((summary) => [summary.exercise_slug, summary])
       );
       exerciseSlugs && checkForUpdates(summariesBySlug, exerciseSlugs);
       return summariesBySlug;
     })
-    .catch((err) => console.error(err));
+    .catch((err) => {
+      console.error(err);
+      return null;
+    });
 }
 
 const transformFunctions = {
@@ -70,14 +89,14 @@ const transformFunctions = {
   [ExerciseType.SELF]: transformSelfAssessedExercise,
 };
 
-export function updateAnswerToLatest(exerciseSlug) {
+export function updateAnswerToLatest(exerciseSlug: string) {
   const user = getUser();
   const token = getToken();
   if (!user || !token) {
     return null;
   }
 
-  const latestAnswerUrl = `${window.ihandout_config.report["api-base"]}exercises/${exerciseSlug}/answers/latest/${user.pk}/`;
+  const latestAnswerUrl = `${window.ihandout_config?.report?.["api-base"]}exercises/${exerciseSlug}/answers/latest/${user.pk}/`;
   const container = document.getElementById(exerciseSlug);
   const transformServerAnswer = transformFunctions[getExerciseType(container)];
 

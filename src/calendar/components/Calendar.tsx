@@ -1,9 +1,14 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
-import ReactCalendar from "react-calendar";
+import ReactCalendar, { CalendarTileProperties } from "react-calendar";
 import ChevronLeft from "../../components/icons/ChevronLeft";
 import ChevronRight from "../../components/icons/ChevronRight";
-import { useCalendarData } from "../../services/calendar";
+import {
+  ICalendarBadge,
+  ICalendarData,
+  IDType,
+  useCalendarData,
+} from "../../services/calendar";
 
 const MOUNT_POINT = window.ihandout_config["mount-point"];
 
@@ -25,7 +30,11 @@ const BadgeList = styled.ul`
   }
 `;
 
-const Badge = styled.li`
+interface IBadgeProps {
+  dtype?: IDType;
+}
+
+const Badge = styled.li<IBadgeProps>`
   .md-typeset && {
     margin: 0 0 0.2rem;
     overflow: hidden;
@@ -78,7 +87,7 @@ const LegendItem = styled.li`
   }
 `;
 
-export function formatDate(date, config) {
+export function formatDate(date: Date, config?: Intl.DateTimeFormatOptions) {
   if (!config) {
     config = {
       day: "numeric",
@@ -89,16 +98,16 @@ export function formatDate(date, config) {
   return date.toLocaleDateString("pt-BR", config);
 }
 
-function makeTileContent(data) {
-  return function ({ date, view }) {
+function makeTileContent(data: ICalendarData | null) {
+  return function ({ date, view }: CalendarTileProperties) {
     if (view !== "month" || !data) {
-      return "";
+      return null;
     }
 
     const dayData = data.calendar[formatDate(date)];
 
     if (!dayData) {
-      return "";
+      return null;
     }
     const { badges, comment } = dayData;
 
@@ -106,7 +115,7 @@ function makeTileContent(data) {
       <>
         {!!badges?.length && (
           <BadgeList>
-            {badges.map((badge) => {
+            {badges.map((badge: ICalendarBadge) => {
               const label = badge.label;
               const uri = badge.uri;
               const dtype = data.dtypes[badge.dtype];
@@ -126,8 +135,8 @@ function makeTileContent(data) {
   };
 }
 
-function makeTileDisabled(data) {
-  return function ({ activeStartDate, date, view }) {
+function makeTileDisabled(data: ICalendarData | null) {
+  return function ({ date, view }: CalendarTileProperties) {
     if (view !== "month" || !data) {
       return false;
     }
@@ -135,13 +144,18 @@ function makeTileDisabled(data) {
     const dayData = data.calendar[formatDate(date)];
     const isClassDay = data.classDays.indexOf(date.getDay()) >= 0;
     if (dayData) {
-      return dayData.disabled;
+      return !!dayData.disabled;
     }
     return !isClassDay;
   };
 }
 
-function Legend({ label, color }) {
+interface ILegendProps {
+  label: string;
+  color: string;
+}
+
+function Legend({ label, color }: ILegendProps) {
   return <LegendItem color={color}>{label}</LegendItem>;
 }
 
@@ -169,13 +183,13 @@ export default function Calendar() {
   return (
     <div>
       <ReactCalendar
-        defaultActiveStartDate={data.start}
+        defaultActiveStartDate={data.start as Date}
         prevLabel={<ChevronLeft />}
         nextLabel={<ChevronRight />}
         prev2Label={null}
         next2Label={null}
         locale="pt-BR"
-        formatMonthYear={(locale, date) => {
+        formatMonthYear={(locale: string, date: Date) => {
           const localized = date.toLocaleDateString("pt-BR", {
             year: "numeric",
             month: "long",
