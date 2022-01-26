@@ -1,3 +1,4 @@
+import "./translations/i18n";
 import "./counter";
 import "./dashboard";
 import "./translator";
