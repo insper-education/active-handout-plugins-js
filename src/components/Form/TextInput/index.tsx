@@ -40,21 +40,27 @@ const StyledInput = styled.input<IStyledInputProps>`
 const TextInput = forwardRef<
   HTMLInputElement,
   ITextInputProps & HTMLProps<HTMLInputElement>
->(({ error, label, placeholder, inputId, name, type = "text" }, ref) => {
-  return (
-    <LabelContainer>
-      {label && <Label htmlFor={inputId}>{label}</Label>}
-      <StyledInput
-        id={inputId}
-        type={type}
-        name={name}
-        error={error}
-        ref={ref as any}
-        placeholder={placeholder || ""}
-      />
-      {error && <ErrorMessage>{error}</ErrorMessage>}
-    </LabelContainer>
-  );
-});
+>(
+  (
+    { error, label, placeholder, inputId, name, type = "text", onChange },
+    ref
+  ) => {
+    return (
+      <LabelContainer>
+        {label && <Label htmlFor={inputId}>{label}</Label>}
+        <StyledInput
+          id={inputId}
+          type={type}
+          name={name}
+          error={error}
+          ref={ref as any}
+          onChange={onChange}
+          placeholder={placeholder || ""}
+        />
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+      </LabelContainer>
+    );
+  }
+);
 
 export default TextInput;

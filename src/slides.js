@@ -1,32 +1,33 @@
+import { getFullUrlWithoutQuery } from "./services/request";
+
 {
-    let current_document = window.location.href;
-    let last_slash = current_document.lastIndexOf("/");
+  let currentDocument = getFullUrlWithoutQuery();
+  let lastSlash = currentDocument.lastIndexOf("/");
 
-    let slide_path = "";
-    if (last_slash == current_document.length-1) {
-        slide_path = current_document + "slides.pdf";
-    } else {
-        slide_path = current_document.substring(0, last_slash) + "/slides.pdf";
+  let slidePath = "";
+  if (lastSlash == currentDocument.length - 1) {
+    slidePath = currentDocument + "slides.pdf";
+  } else {
+    slidePath = currentDocument.substring(0, lastSlash) + "/slides.pdf";
+  }
+
+  let xhr = new XMLHttpRequest();
+  xhr.addEventListener("load", function (ev) {
+    if (xhr.status == 200) {
+      let emb = document.createElement("embed");
+      emb.src = slidePath;
+      emb.width = 500;
+      emb.height = 375;
+      emb.type = "application/pdf";
+
+      let divCenter = document.createElement("div");
+      divCenter.style = "text-align: center";
+      divCenter.className = "no-print";
+      divCenter.appendChild(emb);
+
+      document.querySelector("h1").insertAdjacentElement("afterend", divCenter);
     }
-    
-    let xhr = new XMLHttpRequest();
-    xhr.addEventListener("load", function(ev) {
-        if (xhr.status == 200) {       
-            let emb = document.createElement("embed");
-            emb.src = slide_path;
-            emb.width = 500;
-            emb.height = 375;
-            emb.type = "application/pdf";
-            
-            let div_center = document.createElement("div");
-            div_center.style = "text-align: center";
-            div_center.className = "no-print";
-            div_center.appendChild(emb);
-            
-            document.querySelector("h1").insertAdjacentElement("afterend", div_center);
-        }
-    });
-    xhr.open("head", slide_path);
-    xhr.send();
-
+  });
+  xhr.open("head", slidePath);
+  xhr.send();
 }

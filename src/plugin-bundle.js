@@ -1,4 +1,5 @@
 import "./translations/i18n";
+import "./auth";
 import "./counter";
 import "./dashboard";
 import "./translator";

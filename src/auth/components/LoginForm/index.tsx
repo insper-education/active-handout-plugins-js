@@ -5,13 +5,13 @@ import Form from "../../../components/Form";
 import { useTranslation } from "react-i18next";
 import Button from "../../../components/Button";
 import { schema, ILoginInputs } from "../../login-schema";
-import { login } from "../../services/auth";
+import { api } from "../../../services/auth";
 import ErrorMessage from "../../../components/Form/ErrorMessage";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import Separator from "../../../components/Separator";
-import useQuery from "../../../hooks/useQuery";
 import styled from "styled-components";
 import theme from "../../../commons/theme";
+import { getQueryParam } from "../../../services/request";
 
 const ForgotPasswordLinkContainer = styled.div`
   display: flex;
@@ -27,11 +27,19 @@ const SignInButtonContainer = styled.div`
   width: 100%;
 `;
 
+const LoadingContainer = styled.div`
+  width: 100%;
+  margin-top: ${theme.margin.rem(2)};
+  display: flex;
+  justify-content: center;
+`;
+
 interface ILoginFormProps {
   lostPasswordUrl: string;
+  setToken: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-const LoginForm = ({ lostPasswordUrl }: ILoginFormProps) => {
+const LoginForm = ({ lostPasswordUrl, setToken }: ILoginFormProps) => {
   const mounted = useRef(true);
   useEffect(() => {
     return () => {
@@ -39,8 +47,7 @@ const LoginForm = ({ lostPasswordUrl }: ILoginFormProps) => {
     };
   }, []);
 
-  const params = useQuery();
-  const reason = params.get("reason");
+  const reason = getQueryParam("reason");
 
   const [invalidLogin, setInvalidLogin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -56,10 +63,12 @@ const LoginForm = ({ lostPasswordUrl }: ILoginFormProps) => {
 
   const onSubmit = (data: ILoginInputs) => {
     setLoading(true);
-    login(data.username, data.password)
+    api
+      .login(data.username, data.password)
       .then((user) => {
         if (!mounted.current) return;
-        if (!user) setInvalidLogin(true);
+        if (user) setToken(user.token);
+        else setInvalidLogin(true);
       })
       .finally(() => mounted.current && setLoading(false));
   };
@@ -107,7 +116,6 @@ const LoginForm = ({ lostPasswordUrl }: ILoginFormProps) => {
             variant="secondary"
             type="submit"
             disabled={loading}
-            onClick={() => {}}
           >
             {t("Sign in")}
           </Button>
@@ -118,9 +126,9 @@ const LoginForm = ({ lostPasswordUrl }: ILoginFormProps) => {
         {!!reason && <ErrorMessage>{t(reason || "")}</ErrorMessage>}
 
         {loading && (
-          <div className="w-full flex justify-center">
+          <LoadingContainer>
             <LoadingIndicator size="xs" />
-          </div>
+          </LoadingContainer>
         )}
       </Form>
       <Separator>{t("or")}</Separator>
