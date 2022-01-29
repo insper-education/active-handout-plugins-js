@@ -10,7 +10,9 @@ export interface IReport {
 }
 
 export interface IAuthConfig {
+  "email-password-url"?: string;
   "login-url"?: string;
+  "reset-password-url"?: string;
   "user-url"?: string;
   "watch-urls"?: string[];
 }

@@ -1,39 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Form from "../../../components/Form";
+import Form from "../../../../components/Form";
 import { useTranslation } from "react-i18next";
-import Button from "../../../components/Button";
-import { schema, ILoginInputs } from "../../login-schema";
-import { api } from "../../../services/auth";
-import ErrorMessage from "../../../components/Form/ErrorMessage";
-import LoadingIndicator from "../../../components/LoadingIndicator";
-import Separator from "../../../components/Separator";
-import styled from "styled-components";
-import theme from "../../../commons/theme";
-import { getQueryParam } from "../../../services/request";
-
-const ForgotPasswordLinkContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin: -${theme.margin.rem(3)} 0 ${theme.margin.rem(4)};
-  a {
-    color: ${theme.colors.primary.default};
-  }
-`;
-
-const SignInButtonContainer = styled.div`
-  margin-top: ${theme.margin.rem(2)};
-  width: 100%;
-`;
-
-const LoadingContainer = styled.div`
-  width: 100%;
-  margin-top: ${theme.margin.rem(2)};
-  display: flex;
-  justify-content: center;
-`;
-
+import Button from "../../../../components/Button";
+import { schema, ILoginInputs } from "../../../login-schema";
+import { api } from "../../../../services/auth";
+import ErrorMessage from "../../../../components/Form/ErrorMessage";
+import LoadingIndicator from "../../../../components/LoadingIndicator";
+import Separator from "../../../../components/Separator";
+import { getQueryParam } from "../../../../services/request";
+import { LoadingContainer, SignInButtonContainer } from "../../styles";
+import { ForgotPasswordLinkContainer } from "./styles";
 interface ILoginFormProps {
   lostPasswordUrl: string;
   setToken: React.Dispatch<React.SetStateAction<string | null>>;

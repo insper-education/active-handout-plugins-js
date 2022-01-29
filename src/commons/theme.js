@@ -109,6 +109,14 @@ export default {
     },
   },
   height: { 0: "0px", px: "1px", rem: calcRemSize, pct: calcPctSize },
+  letterSpacing: {
+    tighter: "-0.05em",
+    tight: "-0.025em",
+    normal: "0em",
+    wide: "0.025em",
+    wider: "0.05em",
+    widest: "0.1em",
+  },
   lineHeight: {
     rem: calcRemSize,
     none: "1",

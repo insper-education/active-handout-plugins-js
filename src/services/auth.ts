@@ -55,6 +55,43 @@ const api = {
     localStorage.clear();
     location.reload();
   },
+  resetPassword: (
+    uid: string,
+    token: string,
+    password1: string,
+    password2: string
+  ) => {
+    const resetPasswordUrl =
+      window.ihandout_config.auth?.["reset-password-url"];
+    if (!resetPasswordUrl) {
+      return Promise.reject(
+        "reset-password-url is not set in ihandout_config.auth"
+      );
+    }
+
+    return axios
+      .post(resetPasswordUrl, {
+        uid,
+        token,
+        new_password1: password1,
+        new_password2: password2,
+      })
+      .then(() => true)
+      .catch(() => false);
+  },
+  sendPasswordResetEmail: (email: string) => {
+    const emailPasswordUrl =
+      window.ihandout_config.auth?.["email-password-url"];
+    if (!emailPasswordUrl) {
+      return Promise.reject(
+        "email-password-url is not set in ihandout_config.auth"
+      );
+    }
+
+    return axios.post(emailPasswordUrl, {
+      email,
+    });
+  },
 };
 
 const TOKEN_KEY = "user-token";

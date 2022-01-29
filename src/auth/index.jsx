@@ -4,6 +4,8 @@ import LoginPage from "./components/LoginPage";
 import UserData from "./components/UserData";
 import { cache } from "../services/auth";
 import { redirectTo } from "../services/request";
+import PasswordLostPage from "./components/PasswordLostPage";
+import PasswordResetPage from "./components/PasswordResetPage";
 
 const renderUserData = () => {
   const nav = document.getElementsByClassName("md-header__inner")?.[0];
@@ -15,6 +17,49 @@ const renderUserData = () => {
   root.classList.add(containerClass);
 
   nav.appendChild(root);
+};
+
+const getTitle = (authPage) => {
+  return authPage
+    .getElementsByClassName("admonition-title")[0]
+    ?.textContent.trim();
+};
+
+const getLogo = (authPage) => {
+  return authPage.querySelector("img[alt='logo']")?.src;
+};
+
+const renderAuthPage = (authPage, component) => {
+  const root = document.createElement("div");
+  ReactDOM.render(component, root);
+  authPage.parentElement.replaceChild(root, authPage);
+};
+
+const renderLoginPage = (authPage) => {
+  const lostPasswordUrl = [...authPage.getElementsByTagName("a")].filter(
+    (a) => a.textContent.trim() === "lost-password"
+  )[0];
+  const title = getTitle(authPage);
+  const logo = getLogo(authPage);
+
+  renderAuthPage(
+    authPage,
+    <LoginPage title={title} logo={logo} lostPasswordUrl={lostPasswordUrl} />
+  );
+};
+
+const renderLostPasswordPage = (authPage) => {
+  const title = getTitle(authPage);
+  const logo = getLogo(authPage);
+
+  renderAuthPage(authPage, <PasswordLostPage title={title} logo={logo} />);
+};
+
+const renderPasswordResetPage = (authPage) => {
+  const title = getTitle(authPage);
+  const logo = getLogo(authPage);
+
+  renderAuthPage(authPage, <PasswordResetPage title={title} logo={logo} />);
 };
 
 {
@@ -38,26 +83,12 @@ const renderUserData = () => {
 
   if (authPages.length > 0) {
     const authPage = authPages[0];
-    const title = authPage
-      .getElementsByClassName("admonition-title")[0]
-      ?.textContent.trim();
-    const logo = authPage.querySelector("img[alt='logo']")?.src;
-
     if (authPage.classList.contains("login")) {
-      const lostPasswordUrl = [...authPage.getElementsByTagName("a")].filter(
-        (a) => a.textContent.trim() === "lost-password"
-      )[0];
-
-      const root = document.createElement("div");
-      ReactDOM.render(
-        <LoginPage
-          title={title}
-          logo={logo}
-          lostPasswordUrl={lostPasswordUrl}
-        />,
-        root
-      );
-      authPage.parentElement.replaceChild(root, authPage);
+      renderLoginPage(authPage);
+    } else if (authPage.classList.contains("lost-password")) {
+      renderLostPasswordPage(authPage);
+    } else if (authPage.classList.contains("password-reset")) {
+      renderPasswordResetPage(authPage);
     }
   }
 }

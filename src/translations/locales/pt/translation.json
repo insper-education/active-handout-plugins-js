@@ -18,6 +18,7 @@
   "username is a required field": "Campo obrigatório",
   "password is a required field": "Campo obrigatório",
   "Invalid credentials": "Usuário ou senha inválidos",
+  "email sent message": "Caso este email esteja cadastrado no sistema, enviaremos um email com um link para resetar a senha.",
   "Logout": "Sair",
   "not-admin": "Você não tem permissão para acessar esta página. Por favor, entre com um usuário autorizado.",
   "submissions sent before": "{{users}} alunos enviaram {{total}} respostas até {{lastUpdate}}",

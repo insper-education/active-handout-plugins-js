@@ -1,27 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import styled, { createGlobalStyle } from "styled-components";
 import { cache } from "../../../services/auth";
 import { getQueryParam, redirectTo } from "../../../services/request";
-import LoginForm from "../LoginForm";
+import LoginForm from "./LoginForm";
 import RedirectingPage from "../RedirectingPage";
 import SignInContainer from "../SignInContainer";
-
-const FullPage = styled.section`
-  width: 100%;
-  height: 100%;
-`;
-
-const GlobalStyle = createGlobalStyle`
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  body {
-    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  }
-`;
+import { FullPage, GlobalStyle } from "../styles";
 
 interface ILoginPageProps {
   title: string;
