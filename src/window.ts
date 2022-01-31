@@ -18,6 +18,7 @@ export interface IAuthConfig {
 }
 
 export interface IHandoutConfig {
+  calendar?: string;
   counter?: string[];
   "notify-old-page"?: INotifyOldPage;
   auth?: IAuthConfig;
