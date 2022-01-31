@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Form from "../../../../components/Form";
@@ -12,6 +12,7 @@ import Separator from "../../../../components/Separator";
 import { getQueryParam } from "../../../../services/request";
 import { LoadingContainer, SignInButtonContainer } from "../../styles";
 import { ForgotPasswordLinkContainer } from "./styles";
+
 interface ILoginFormProps {
   lostPasswordUrl: string;
   setToken: React.Dispatch<React.SetStateAction<string | null>>;
@@ -39,7 +40,7 @@ const LoginForm = ({ lostPasswordUrl, setToken }: ILoginFormProps) => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: ILoginInputs) => {
+  const onSubmit = useCallback((data: ILoginInputs) => {
     setLoading(true);
     api
       .login(data.username, data.password)
@@ -49,21 +50,27 @@ const LoginForm = ({ lostPasswordUrl, setToken }: ILoginFormProps) => {
         else setInvalidLogin(true);
       })
       .finally(() => mounted.current && setLoading(false));
-  };
+  }, []);
 
   const { onChange: onUsernameChange, ...usernameInputProps } =
     register("username");
-  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInvalidLogin(false);
-    onUsernameChange(e);
-  };
+  const handleUsernameChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setInvalidLogin(false);
+      onUsernameChange(e);
+    },
+    [onUsernameChange]
+  );
 
   const { onChange: onPasswordChange, ...passwordInputProps } =
     register("password");
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInvalidLogin(false);
-    onPasswordChange(e);
-  };
+  const handlePasswordChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setInvalidLogin(false);
+      onPasswordChange(e);
+    },
+    [onPasswordChange]
+  );
 
   return (
     <>

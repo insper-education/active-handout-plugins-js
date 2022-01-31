@@ -9,5 +9,5 @@
   "not-admin": "You don't have permission to access this page. Please log in with an authorized user.",
   "submissions sent before": "{{users}} students submitted {{total}} answers before {{lastUpdate}}",
   "lost password message": "Enter your email and we'll send you instructions to reset your password.",
-  "email sent message": "If this email is registered in the system, a reset password link will be sent to it."
+  "password reset email sent message": "If this email is registered in the system, a reset password link will be sent to it."
 }

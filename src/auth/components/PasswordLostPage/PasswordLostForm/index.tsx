@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import Button from "../../../../components/Button";
@@ -16,11 +16,7 @@ const PasswordLostForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [finished, setFinished] = useState<boolean>(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IPasswordResetInputs>({
+  const { register, handleSubmit } = useForm<IPasswordResetInputs>({
     resolver: yupResolver(passwordResetSchema),
   });
 
@@ -29,12 +25,13 @@ const PasswordLostForm = () => {
     onEmailChange(e);
   };
 
-  const onSubmit = ({ email }: IPasswordResetInputs) => {
+  const onSubmit = useCallback(({ email }: IPasswordResetInputs) => {
     setLoading(true);
     api.sendPasswordResetEmail(email).finally(() => {
+      setLoading(false);
       setFinished(true);
     });
-  };
+  }, []);
 
   return (
     <>
@@ -64,7 +61,7 @@ const PasswordLostForm = () => {
         </>
       )}
 
-      {finished && <p>{t("email sent message")}</p>}
+      {finished && <p>{t("password reset email sent message")}</p>}
     </>
   );
 };

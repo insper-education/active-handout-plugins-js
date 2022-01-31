@@ -1,24 +1,8 @@
 import React, { MouseEvent, useEffect, useMemo, useState } from "react";
-import styled from "styled-components";
-import theme from "../../../commons/theme";
 import useUser from "../../../hooks/useUser";
 import { getSomeName } from "../../../models/user";
+import { Container, UserButton } from "./styles";
 import UserMenu from "./UserMenu";
-
-const Container = styled.div`
-  position: relative;
-`;
-
-const UserButton = styled.button`
-  color: var(--md-primary-bg-color);
-  cursor: pointer;
-  padding: ${theme.padding.rem(1)} ${theme.padding.rem(2)};
-
-  :after {
-    content: "▾";
-    margin-left: ${theme.margin.rem(2)};
-  }
-`;
 
 export default function UserData() {
   const user = useUser();

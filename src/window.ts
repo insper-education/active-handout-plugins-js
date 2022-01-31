@@ -14,7 +14,7 @@ export interface IAuthConfig {
   "login-url"?: string;
   "reset-password-url"?: string;
   "user-url"?: string;
-  "watch-urls"?: string[];
+  "watch-urls"?: string;
 }
 
 export interface IHandoutConfig {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslation } from "react-i18next";
@@ -45,7 +45,7 @@ const PasswordChangeForm = ({
   });
 
   const [invalidLink, setInvalidLink] = useState<boolean>(false);
-  const onSubmit = (data: PasswordChangeInputs) => {
+  const onSubmit = useCallback((data: PasswordChangeInputs) => {
     setLoading(true);
     api
       .resetPassword(
@@ -59,7 +59,7 @@ const PasswordChangeForm = ({
         else setInvalidLink(true);
       })
       .finally(() => mounted.current && setLoading(false));
-  };
+  }, []);
 
   const { onChange: onPasswordChange, ...passwordInputProps } =
     register("password");

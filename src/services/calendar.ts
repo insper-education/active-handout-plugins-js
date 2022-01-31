@@ -27,12 +27,20 @@ export interface IDayEntry {
   comment?: string;
 }
 
+interface IDTypes {
+  [key: string]: IDType;
+}
+
+interface IDayEntries {
+  [key: string]: IDayEntry;
+}
+
 export interface ICalendarData {
   start: Date | string;
   end: Date | string;
   classDays: number[];
-  dtypes: Map<string, IDType>;
-  calendar: Map<string, IDayEntry>;
+  dtypes: IDTypes;
+  calendar: IDayEntries;
 }
 
 export function parseDate(dateStr: string): Date {
