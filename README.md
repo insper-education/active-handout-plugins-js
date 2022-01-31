@@ -16,6 +16,13 @@ Run the following commands from the project's root directory:
 Create and edit your files in the `src` folder. Then, run the following command from the `plugins-js` directory to compile and serve the package on `localhost:9000`:
 
     $ npm run dev
+    
+Edit mkdocs to use the package on the development mode:
+
+``` diff
+-   - https://cdn.jsdelivr.net/gh/insper-education/active-handout-plugins-js@main/package/plugin-bundle.js
++   - http://localhost:9000/plugin-bundle.js
+```
 
 **Important:**
 
