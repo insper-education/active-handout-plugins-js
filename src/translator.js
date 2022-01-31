@@ -9,7 +9,9 @@ function translate(text) {
 
   for (const admonition of admonitions) {
     const title = admonition.querySelector(".admonition-title");
-    const titleText = translate(title.innerHTML);
-    title.innerHTML = titleText;
+    if (!!title) {
+      const titleText = translate(title.innerHTML);
+      title.innerHTML = titleText;
+    }
   }
 }
