@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import yaml from "js-yaml";
 
-const MOUNT_POINT = window.ihandout_config["mount-point"];
-const CALENDAR_PATH = MOUNT_POINT + "calendar.yml";
+const CALENDAR_PATH = window.ihandout_config["calendar"];
 
 export interface IColor {
   default: string;
