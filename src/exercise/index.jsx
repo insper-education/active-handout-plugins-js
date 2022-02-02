@@ -16,7 +16,7 @@ import {
 
   if (exercises.length) {
     const slugs = [...exercises].map((admonition) => admonition.id);
-    const mainContainer = document.querySelector(".md-main__inner");
+    const mainContainer = document.querySelector(".md-sidebar__inner");
     renderHandoutProgress(mainContainer, slugs);
   }
 
