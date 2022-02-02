@@ -10,17 +10,19 @@ export interface IReport {
 }
 
 export interface IAuthConfig {
-  url?: string;
-  "watch-urls"?: string[];
+  "email-password-url"?: string;
+  "login-url"?: string;
+  "reset-password-url"?: string;
+  "user-url"?: string;
+  "watch-urls"?: string;
 }
 
 export interface IHandoutConfig {
+  calendar?: string;
   counter?: string[];
   "notify-old-page"?: INotifyOldPage;
-  "user-url"?: string;
   auth?: IAuthConfig;
   "mount-point"?: string;
-  "api-base"?: string;
   report?: IReport;
 }
 

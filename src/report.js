@@ -1,4 +1,4 @@
-import { getToken } from "./auth";
+import { cache } from "./services/auth";
 import notification from "./notification";
 
 let REPORT_URL;
@@ -12,7 +12,7 @@ if (
 }
 
 function sendAnswer(slug, points, test_results, student_input) {
-  if (REPORT_URL === "" || getToken() === "") {
+  if (REPORT_URL === "" || cache.getToken() === "") {
     return false;
   }
 
@@ -30,7 +30,7 @@ function sendAnswer(slug, points, test_results, student_input) {
     mode: "cors",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Token " + getToken(),
+      Authorization: "Token " + cache.getToken(),
     },
     body: JSON.stringify(answer_data),
   })

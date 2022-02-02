@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import yaml from "js-yaml";
 
-const CALENDAR_PATH = window.ihandout_config["calendar"];
+const CALENDAR_PATH = window.ihandout_config.calendar;
 
 export interface IColor {
   default: string;
@@ -27,12 +27,20 @@ export interface IDayEntry {
   comment?: string;
 }
 
+interface IDTypes {
+  [key: string]: IDType;
+}
+
+interface IDayEntries {
+  [key: string]: IDayEntry;
+}
+
 export interface ICalendarData {
   start: Date | string;
   end: Date | string;
   classDays: number[];
-  dtypes: Map<string, IDType>;
-  calendar: Map<string, IDayEntry>;
+  dtypes: IDTypes;
+  calendar: IDayEntries;
 }
 
 export function parseDate(dateStr: string): Date {
@@ -51,12 +59,13 @@ export function useCalendarData(): ICalendarData | null {
   const [data, setData] = useState<ICalendarData | null>(null);
 
   useEffect(() => {
+    if (!CALENDAR_PATH) return;
     fetch(CALENDAR_PATH)
       .then((res) => res.text())
       .then((text) => {
         setData(prepareData(yaml.load(text) as ICalendarData));
       });
-  }, []);
+  }, [CALENDAR_PATH]);
 
   return data;
 }

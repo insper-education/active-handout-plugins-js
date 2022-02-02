@@ -1,4 +1,5 @@
 import { isNullOrUndefined } from "../../../jsutils";
+import { cache } from "../../../services/auth";
 import { transformCodeExercise } from "../../code-exercise";
 import { transformCSSExercise } from "../../css-exercises";
 import { makeAnswerFromServerEvent } from "../../events";
@@ -34,10 +35,6 @@ function getUser() {
   return JSON.parse(localStorage.getItem("user-data") || "");
 }
 
-function getToken() {
-  return localStorage.getItem("user-token");
-}
-
 export interface IExerciseSummary {
   pk: number;
   user: number;
@@ -53,7 +50,7 @@ export function fetchAnswerSummaries(
   exerciseSlugs?: string[]
 ): Promise<Map<string, IExerciseSummary> | null> {
   const user = getUser();
-  const token = getToken();
+  const token = cache.getToken();
   if (!user || !token) {
     return Promise.resolve(null);
   }
@@ -91,7 +88,7 @@ const transformFunctions = {
 
 export function updateAnswerToLatest(exerciseSlug: string) {
   const user = getUser();
-  const token = getToken();
+  const token = cache.getToken();
   if (!user || !token) {
     return null;
   }
