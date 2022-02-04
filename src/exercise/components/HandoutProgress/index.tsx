@@ -10,8 +10,8 @@ const ProgressContainer = styled.div`
   position: sticky;
   top: 2.4rem;
   width: 10rem;
-  padding: 0rem 0rem;
-  margin-bottom: 1.2rem;
+  padding: 0 0.6rem;
+  margin-bottom: 2rem;
   align-self: flex-start;
   flex-shrink: 0;
 
