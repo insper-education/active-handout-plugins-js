@@ -62,13 +62,14 @@ const TopicName = styled.span`
   flex-grow: 1;
 `;
 
-const TopicDate = styled.span`
+const TopicDate = styled.span<ITopicCardProps>`
   max-width: 5ch;
   font-size: 1.5em;
   line-height: 1;
   padding-bottom: 0.5rem;
-  color: #000;
-  mix-blend-mode: overlay;
+  color: ${({ competence }) => competence?.color?.default || "#000"};
+  filter: brightness(0.8);
+  mix-blend-mode: multiply;
   margin-left: 0.2rem;
 `;
 

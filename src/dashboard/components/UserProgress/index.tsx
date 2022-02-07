@@ -49,7 +49,7 @@ function Topic({ topic, competence, summariesBySlug }: ITopicProps) {
       <TopicNameContainer>
         <TopicName>{topic.label || topic.name}</TopicName>
         {topic?.date && (
-          <TopicDate>
+          <TopicDate competence={competence}>
             {formatDate(topic?.date, {
               day: "2-digit",
               month: "2-digit",
@@ -60,7 +60,7 @@ function Topic({ topic, competence, summariesBySlug }: ITopicProps) {
       <ProgressSetContainer>
         <ProgressContainer>
           <ProgressTitle>
-            Handout{" "}
+            Handouts{" "}
             <em>
               ({handoutPoints}/{handoutTotal})
             </em>
