@@ -13,6 +13,5 @@ export function renderHandoutProgress(container, exerciseSlugs) {
     </QueryClientProvider>,
     root
   );
-
-  container.appendChild(root);
+  container.insertBefore(root, container.firstChild)
 }
