@@ -69,7 +69,7 @@ function Topic({ topic, competence, summariesBySlug }: ITopicProps) {
         </ProgressContainer>
         <ProgressContainer>
           <ProgressTitle>
-            Exercícios{" "}
+            Exercícios adicionais{" "}
             <em>
               ({extraPoints}/{extraTotal})
             </em>

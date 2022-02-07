@@ -12,7 +12,7 @@ interface IExercisesByGroup {
   extra: IExercise[];
 }
 
-interface IExercise {
+export interface IExercise {
   slug: string;
   url: string;
   type: string;
