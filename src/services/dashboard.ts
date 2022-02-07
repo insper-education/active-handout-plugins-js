@@ -13,7 +13,6 @@ function mergeTopicsForBadge(
   const uri = badge.uri;
   if (!uri) return null;
   const badgeTopics = topics.filter((topic) => topic.name.indexOf(uri) >= 0);
-  console.log(uri, badgeTopics);
   if (badgeTopics.length) {
     const name = badgeTopics[0].name;
     let exercises = [] as IExercise[];
@@ -73,4 +72,22 @@ function sortTopicsByDate(
   return sorted;
 }
 
-export { sortTopicsByDate };
+export function groupTopicsByDType(
+  topics: Topic[] | null,
+  calendarData: ICalendarData | null
+) {
+  const byDType = new Map<string, Topic[]>();
+  if (!topics) return byDType;
+
+  const sorted = sortTopicsByDate(topics, calendarData);
+  if (!sorted) return byDType;
+  for (let topic of sorted) {
+    const dtype = topic.dtype;
+    if (!dtype) continue;
+    if (!byDType.has(dtype)) {
+      byDType.set(dtype, []);
+    }
+    byDType.get(dtype)?.push(topic);
+  }
+  return byDType;
+}
