@@ -31,10 +31,11 @@ export function Topic({ topic, competence, summariesBySlug }: ITopicProps) {
 
     setHandoutTotal(exercisesByGroup.handout.length);
     const handoutSlugs = exercisesByGroup.handout.map((e) => e.slug);
+
     setHandoutPoints(computePoints(handoutSlugs, summariesBySlug));
 
     setExtraTotal(exercisesByGroup.extra.length);
-    const extraSlugs = exercisesByGroup.handout.map((e) => e.slug);
+    const extraSlugs = exercisesByGroup.extra.map((e) => e.slug);
     setExtraPoints(computePoints(extraSlugs, summariesBySlug));
   }, [topic.exercises, summariesBySlug]);
 

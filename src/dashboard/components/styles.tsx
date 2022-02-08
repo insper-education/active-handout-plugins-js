@@ -32,6 +32,7 @@ export const TabTitle = styled.button<ITabTitleProps>`
 `;
 
 export const TabTitlePoints = styled.span<ITabTitleProps>`
+  margin-left: ${theme.margin.rem(1)};
   ${({ dtype, selected }) =>
     selected ? dtypeAwareColor(dtype) : `color: ${theme.colors.gray[300]};}`};
 `;
