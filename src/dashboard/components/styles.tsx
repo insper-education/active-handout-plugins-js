@@ -24,11 +24,12 @@ export const TabTitle = styled.button<ITabTitleProps>`
 
   ${theme.text.xl};
   padding: ${theme.padding.rem(2)} ${theme.padding.rem(4)};
-  background-color: ${({ selected, dtype }) =>
-    selected ? dtype.color.default : "transparent"};
+  border-bottom: ${({ selected, dtype }) =>
+    selected
+      ? `5px solid ${dtype.color.default}`
+      : `1px solid ${theme.colors.gray[300]}`};
   color: ${({ selected, dtype }) =>
     selected ? dtype.textColor : theme.colors.gray[400]};
-  border-radius: ${theme.borderRadius.full};
 `;
 
 export const TabTitlePoints = styled.span<ITabTitleProps>`
