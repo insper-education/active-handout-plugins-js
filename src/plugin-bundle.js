@@ -4,6 +4,7 @@ import "./counter";
 import "./dashboard";
 import "./translator";
 import "./exercise";
+import "./exercise-list";
 import "./progress-check";
 import "./video";
 import "./calendar";
