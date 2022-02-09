@@ -67,7 +67,7 @@ function Video({ videoUrl, alt }) {
       }
 
       {!isFromYoutube &&
-        <video width="640" class="no-print" control>
+        <video width="640" class="no-print" controls>
           <source src={source} type={`video/${ext}`} />
         </video>
       }
