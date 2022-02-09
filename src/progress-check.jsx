@@ -63,10 +63,23 @@ function hideAllNextSiblings(element) {
   }
 }
 
+function unhideElement(element) {
+  // "unhide" instead of "show" because if it was not hidden,
+  // it recurses through the children until a hidden child is found
+  if (!element) return;
+  if (element.style.display === "none") {
+    element.style.display = "";
+  } else {
+    for (let child of element.children) {
+      unhideElement(child);
+    }
+  }
+}
+
 function showNextSiblingsUntilCheckpoint(element) {
   let next = element.nextElementSibling;
   while (next != null) {
-    next.style.display = "";
+    unhideElement(next);
     if (next.classList.contains("checkpoint")) {
       return;
     }
