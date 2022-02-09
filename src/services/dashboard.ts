@@ -10,7 +10,7 @@ function mergeTopicsForBadge(
   badge: ICalendarBadge,
   topics: Topic[]
 ): Topic | null {
-  const uri = badge.uri;
+  const uri = badge.uri?.split("/").splice(1).join("/");
   if (!uri) return null;
   const badgeTopics = topics.filter((topic) => topic.name.indexOf(uri) >= 0);
   if (badgeTopics.length) {
@@ -36,7 +36,7 @@ function extractBadgesWithDate(calendarData: ICalendarData): ICalendarBadge[] {
 function groupBadgesByTopic(badges: ICalendarBadge[]): ICalendarBadge[] {
   const byTopic = new Map<string, ICalendarBadge>();
   for (let badge of badges) {
-    const topic = badge.uri?.split("/").slice(1, 3).join("/");
+    const topic = badge.uri?.split("/").slice(0, 3).join("/");
     if (!topic) continue;
     if (byTopic.has(topic)) {
       const curBadge = byTopic.get(topic) as ICalendarBadge;
