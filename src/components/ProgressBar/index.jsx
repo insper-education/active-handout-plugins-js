@@ -28,7 +28,7 @@ const Progress = styled.div`
 `;
 
 function ProgressBar({ current, total }) {
-  const percentage = total ? Math.round((100 * current) / total) : 100;
+  const percentage = total ? Math.round((100 * current) / total) : 0;
   return (
     <ProgressContainer>
       <Progress percentage={percentage} disabled={!total} />

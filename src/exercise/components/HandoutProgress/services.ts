@@ -65,7 +65,8 @@ export function fetchAnswerSummaries(
     },
   })
     .then((res) => res.json())
-    .then((summaries: IExerciseSummary[]) => {
+    .then((summaries?: IExerciseSummary[]) => {
+      if (!summaries?.length) return new Map<string, IExerciseSummary>();
       const summariesBySlug = new Map<string, IExerciseSummary>(
         summaries.map((summary) => [summary.exercise_slug, summary])
       );
