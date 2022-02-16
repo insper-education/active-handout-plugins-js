@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
-import { IExerciseSummary } from "../../../exercise/components/HandoutProgress/services";
 import { computePoints } from "../../../exercise/utils";
+import { IExerciseSummary } from "../../../models/summary";
 import { ICalendarData, IDType } from "../../../services/calendar";
 import { Topic as ExerciseTopic } from "../exercise";
 import {
