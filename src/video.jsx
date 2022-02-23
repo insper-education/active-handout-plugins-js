@@ -89,6 +89,10 @@ function Video({ videoUrl, alt }) {
       <Video videoUrl={img.src} alt={img.alt} />,
       root
     );
-    div.parentElement.replaceChild(root, div);
+    div.classList.remove("admonition", "video");
+    for (const child of div.children) {
+      div.removeChild(child);
+    }
+    div.appendChild(root);
   });
 }
