@@ -19,10 +19,11 @@ export const Points = styled.span<{ points: number }>`
 
 export const SubmissionListHeader = styled.div`
   width: 100%;
-  margin-top: 2rem;
+  margin: ${theme.margin.rem(12)} 0 ${theme.margin.rem(8)};
 
   display: flex;
   align-items: center;
+  border-bottom: ${theme.border[2]} solid ${theme.colors.gray[200]};
 `;
 
 export const SubmissionListHeaderButton = styled.button`

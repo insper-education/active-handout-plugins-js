@@ -8,7 +8,7 @@ interface ICodeVisualizerProps {
   children: string;
   language?: "python" | "css" | "javascript";
 }
-export function CodeVisualizer({
+export function CodeViewer({
   children,
   language = "python",
 }: ICodeVisualizerProps) {

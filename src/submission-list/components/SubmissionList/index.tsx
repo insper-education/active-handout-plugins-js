@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { CodeVisualizer } from "../../../components/CodeVisualizer";
+import CodeExplorer from "../../../components/CodeExplorer";
 import ChevronLeft from "../../../components/icons/ChevronLeft";
 import ChevronRight from "../../../components/icons/ChevronRight";
 import { isNullOrUndefined } from "../../../jsutils";
@@ -66,7 +66,7 @@ export default function SubmissionList({ slug }: ISubmissionListProps) {
     ? new Date(submission?.submission_date)
     : null;
   const submissionDateString = dateWithTimeSeconds(submissionDate);
-  const code = submission?.student_input?.code;
+  const files = submission?.student_input;
 
   if (!slug || !summaryFetched) return null;
 
@@ -112,7 +112,7 @@ export default function SubmissionList({ slug }: ISubmissionListProps) {
             </SubmissionListHeader>
           )}
 
-          {code && <CodeVisualizer>{code}</CodeVisualizer>}
+          {files && <CodeExplorer files={files} />}
         </>
       )}
     </AnswerContainer>
