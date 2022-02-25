@@ -21,7 +21,8 @@ function CodeExplorer({ files }: ICodeExplorerProps) {
   useEffect(() => {
     const newFilenames = Object.keys(files).sort();
     setFilenames(newFilenames);
-    if (!selectedFilename) setSelectedFilename(newFilenames?.[0] || "");
+    if (!selectedFilename || !files[selectedFilename])
+      setSelectedFilename(newFilenames?.[0] || "");
   }, [files]);
 
   const makeHandleSelectFilename = (filename: string) => {
