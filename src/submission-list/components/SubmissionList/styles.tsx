@@ -34,6 +34,10 @@ export const SubmissionListHeaderButton = styled.button`
   :disabled {
     cursor: default;
   }
+
+  svg {
+    max-height: 16px;
+  }
 `;
 
 export const SubmissionListHeaderTitle = styled.span`
