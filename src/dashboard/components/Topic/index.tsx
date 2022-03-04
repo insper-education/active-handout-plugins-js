@@ -40,7 +40,7 @@ export function Topic({ topic, competence, summariesBySlug }: ITopicProps) {
   }, [topic.exercises, summariesBySlug]);
 
   return (
-    <TopicCard dtype={competence} href={topic.uri}>
+    <TopicCard dtype={competence} href={topic.url}>
       <TopicNameContainer>
         <TopicName>{topic.label || topic.name}</TopicName>
         {topic?.date && (

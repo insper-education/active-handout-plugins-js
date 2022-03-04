@@ -18,6 +18,7 @@ export interface ICalendarBadge {
   label: string;
   dtype: string;
   uri?: string;
+  url?: string;
   date?: string;
 }
 

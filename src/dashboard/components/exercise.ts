@@ -27,6 +27,7 @@ export class Topic {
   date?: Date | null;
   dtype?: string;
   uri?: string;
+  url?: string;
 
   constructor(name: string, exercises?: IExercise[], badge?: ICalendarBadge) {
     this.name = name;
@@ -35,6 +36,7 @@ export class Topic {
     this.date = badge?.date ? parseDate(badge?.date) : null;
     this.dtype = badge?.dtype;
     this.uri = badge?.uri;
+    this.url = badge?.url;
   }
 
   addExercise(exercise: IExercise) {
