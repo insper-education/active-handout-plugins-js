@@ -1,33 +1,36 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {Termynal} from "./extras/termynal"
-
-
-function Terminal({text}) {
-  console.log(text);
-}
+import "./extras/termynal.css"
 
 {
+  function parseConfig(item) {
+    var text = item.innerHTML;
+    var tokenFirst = text.indexOf(":");
+    var tokenLast  = text.lastIndexOf(":");
+    var dataTy = '';
+
+    if (tokenFirst != -1 && tokenLast != -1) {
+      dataTy = text.substring(tokenFirst+1, tokenLast);
+      text = text.substring(tokenLast+1);
+    }
+    return(<span data-ty={dataTy}>{text}</span>)
+  }
+
   const terminals = document.querySelectorAll(".admonition.terminal");
   terminals.forEach((div, i) => {
-    const root = document.createElement("div");
     const termynalId = `termynal__${i}`;
-    console.log(`${termynalId}`);
+    const lines = Array.from(div.getElementsByTagName("li"));
 
+    const root = document.createElement("div");
     ReactDOM.render(
       <div id={termynalId} data-termynal>
-        <span data-ty="progress"></span>
-        <span data-ty>TESTANDOOOOO......</span>
+        {lines.map(x => parseConfig(x))}
       </div>
       , root);
 
-    div.classList.remove("admonition", "terminal");
-    for (const child of div.children) {
-      div.removeChild(child);
-    }
-    div.appendChild(root);
+    div.parentElement.replaceChild(root, div)
 
-    var termynal = new Termynal(`#${termynalId}`, { startDelay: 600 })
+    var termynal = new Termynal(`#${termynalId}`, { startDelay: 300 })
   });
-
 }
