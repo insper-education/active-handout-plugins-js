@@ -1,7 +1,8 @@
 import { ICalendarBadge, parseDate } from "../../services/calendar";
 
 export function fetchExerciseDetails() {
-  return fetch("/DevLife/exercises.json")
+  const mountPoint = window.ihandout_config["mount-point"] || "";
+  return fetch(`${mountPoint}exercises.json`)
     .then((res) => res.json())
     .then(hydrateExercises)
     .catch((err) => console.error(err));
