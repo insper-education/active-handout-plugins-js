@@ -84,7 +84,7 @@ export function registerAnswer(
 
 export function extractAnswerData(exerciseContainer) {
   const answerDiv = exerciseContainer.querySelector(".admonition.answer");
-  let answerData;
+  let answerData = null;
   if (answerDiv) {
     answerData = parseAnswer(answerDiv);
     exerciseContainer.removeChild(answerDiv);
