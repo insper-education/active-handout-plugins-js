@@ -10,4 +10,6 @@ import "./video";
 import "./calendar";
 import "./slides";
 import "./notify-content-update";
+import "./extras/termynal";
+import "./terminal";
 import "./submission-list";
