@@ -23,14 +23,16 @@ const ChoiceDiv = styled.div`
 
     if (submitted || isSelected) hover = "";
 
-    if (isSelected) {
-      width = "2px";
-      if (submitted) {
-        borderColor = isAnswer ? "#00c853" : "#ff5252";
-      } else {
-        borderColor = "var(--md-primary-fg-color)";
+    if (submitted) {
+      borderColor = "#dedfde";
+      if (isAnswer) {
+        width = "3px";
+        borderColor = "#00c853";
       }
-    } else if (submitted) borderColor = "#dedfde";
+      if (isSelected && !isAnswer) {
+        borderColor = "#ff5252"
+      }
+    } else if (isSelected) borderColor = "var(--md-primary-fg-color)";
 
     return `
       border: ${width} solid ${borderColor};
@@ -56,23 +58,25 @@ const ChoiceLabelContainer = styled.div`
   align-items: center;
   margin-right: 0.5rem;
   padding: 0.5rem;
-  color: var(--md-primary-bg-color);
 
   ${({ isSelected, submitted, isAnswer }) => {
+    let color = "var(--md-primary-bg-color);"
+    let borderRight = "0px";
     let backgroundColor = "var(--md-primary-fg-color--light)";
 
-    if (isSelected) {
-      if (submitted) {
-        backgroundColor = isAnswer ? "#00c853" : "#ff5252";
-      } else {
-        backgroundColor = "var(--md-primary-fg-color)";
-      }
-    } else if (submitted) {
-      backgroundColor = isAnswer ? "#00c853" : "#dedfde";
+    if (submitted) {
+        backgroundColor = "#dedfde";
+        if (isAnswer) backgroundColor = "#00c853";
+        else if (isSelected) {
+          color = "#ff5252";
+          borderRight = "1px solid palevioletred";
+        }
     }
 
     return `
-      background-color: ${backgroundColor};
+        color: ${color};
+        background-color: ${backgroundColor};
+        border-right: ${borderRight};
     `;
   }}
 `;

@@ -1,4 +1,5 @@
 import { isNullOrUndefined } from "../../../jsutils";
+import { IExerciseSummary } from "../../../models/summary";
 import { cache } from "../../../services/auth";
 import { transformCodeExercise } from "../../code-exercise";
 import { transformCSSExercise } from "../../css-exercises";
@@ -33,17 +34,6 @@ function checkForUpdates(
 
 function getUser() {
   return JSON.parse(localStorage.getItem("user-data") || "");
-}
-
-export interface IExerciseSummary {
-  pk: number;
-  user: number;
-  exercise: number;
-  exercise_slug: string;
-  exercise_type: string;
-  max_points: number;
-  answer_count: number;
-  latest: number;
 }
 
 export function fetchAnswerSummaries(

@@ -6,6 +6,8 @@ import {
 import { maxDateString } from "../jsutils";
 import { ICalendarBadge, ICalendarData, IDayEntry } from "./calendar";
 
+const MOUNT_POINT = window.ihandout_config["mount-point"];
+
 function mergeTopicsForBadge(
   badge: ICalendarBadge,
   topics: Topic[]
@@ -44,10 +46,15 @@ function groupBadgesByTopic(badges: ICalendarBadge[]): ICalendarBadge[] {
         label: curBadge.label,
         dtype: curBadge.dtype,
         uri: topic,
+        url: `${MOUNT_POINT}${curBadge.uri}`,
         date: maxDateString(curBadge.date, badge.date),
       });
     } else {
-      byTopic.set(topic, { ...badge, uri: topic });
+      byTopic.set(topic, {
+        ...badge,
+        uri: topic,
+        url: `${MOUNT_POINT}${badge.uri}`,
+      });
     }
   }
   return [...byTopic.values()];

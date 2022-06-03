@@ -1,7 +1,8 @@
 import { ICalendarBadge, parseDate } from "../../services/calendar";
 
 export function fetchExerciseDetails() {
-  return fetch("/DevLife/exercises.json")
+  const mountPoint = window.ihandout_config["mount-point"] || "";
+  return fetch(`${mountPoint}exercises.json`)
     .then((res) => res.json())
     .then(hydrateExercises)
     .catch((err) => console.error(err));
@@ -27,6 +28,7 @@ export class Topic {
   date?: Date | null;
   dtype?: string;
   uri?: string;
+  url?: string;
 
   constructor(name: string, exercises?: IExercise[], badge?: ICalendarBadge) {
     this.name = name;
@@ -35,6 +37,7 @@ export class Topic {
     this.date = badge?.date ? parseDate(badge?.date) : null;
     this.dtype = badge?.dtype;
     this.uri = badge?.uri;
+    this.url = badge?.url;
   }
 
   addExercise(exercise: IExercise) {

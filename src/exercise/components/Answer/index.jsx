@@ -19,12 +19,16 @@ const AnswerTitle = styled.h4`
 `;
 
 function Answer({ data, visible }) {
-  return (
-    <AnswerContainer visible={visible}>
-      <AnswerTitle>{data.title}</AnswerTitle>
-      <div dangerouslySetInnerHTML={data.innerHTML} />
-    </AnswerContainer>
-  );
+  if (data != null) {
+    return (
+      <AnswerContainer visible={visible}>
+        <AnswerTitle>{data.title}</AnswerTitle>
+        <div dangerouslySetInnerHTML={data.innerHTML} />
+      </AnswerContainer>
+    );
+  } else {
+    return (null)
+  }
 }
 
 Answer.propTypes = {

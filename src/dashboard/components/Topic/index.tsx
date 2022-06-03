@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { formatDate } from "../../../calendar/components/Calendar";
 import ProgressBar from "../../../components/ProgressBar";
-import { IExerciseSummary } from "../../../exercise/components/HandoutProgress/services";
 import { computePoints } from "../../../exercise/utils";
+import { IExerciseSummary } from "../../../models/summary";
 import { IDType } from "../../../services/calendar";
 import { Topic as ExerciseTopic } from "../exercise";
 import {
@@ -40,7 +40,7 @@ export function Topic({ topic, competence, summariesBySlug }: ITopicProps) {
   }, [topic.exercises, summariesBySlug]);
 
   return (
-    <TopicCard dtype={competence} href={topic.uri}>
+    <TopicCard dtype={competence} href={topic.url}>
       <TopicNameContainer>
         <TopicName>{topic.label || topic.name}</TopicName>
         {topic?.date && (
