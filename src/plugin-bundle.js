@@ -11,4 +11,6 @@ import "./calendar";
 import "./slides";
 import "./notify-content-update";
 import "./submission-list";
+import "./extras/termynal";
+import "./terminal";
 import "./image-enlacer";
